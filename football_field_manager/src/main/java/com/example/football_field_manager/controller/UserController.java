@@ -1,6 +1,7 @@
 package com.example.football_field_manager.controller;
 
-import com.example.football_field_manager.dto.request.UserRequest;
+import com.example.football_field_manager.dto.request.UserCreateRequest;
+import com.example.football_field_manager.dto.request.UserUpdateInfoRequest;
 import com.example.football_field_manager.dto.response.ApiResponse;
 import com.example.football_field_manager.dto.response.UserResponse;
 import com.example.football_field_manager.service.UserService;
@@ -31,10 +32,18 @@ public class UserController {
     }
 
     @PostMapping
-    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserRequest request) {
+    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreateRequest request) {
         log.warn("call api [POST] /user {}", new Date());
         ApiResponse<UserResponse> response = new ApiResponse<>();
         response.setData(userService.createUser(request));
+        return response;
+    }
+
+    @PutMapping("/{userId}")
+    ApiResponse<UserResponse> updateInfoUserById(@PathVariable String userId, @RequestBody UserUpdateInfoRequest request){
+        log.warn("call api [PUT] /user/{userId} {}", new Date());
+        ApiResponse<UserResponse> response = new ApiResponse<>();
+        response.setData(userService.updateInfoUserById(userId, request));
         return response;
     }
 }

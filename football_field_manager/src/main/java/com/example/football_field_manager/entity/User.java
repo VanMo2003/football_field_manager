@@ -1,18 +1,17 @@
 package com.example.football_field_manager.entity;
 
+import com.example.football_field_manager.annotation.MinAge;
 import com.example.football_field_manager.constant.Gender;
 import com.example.football_field_manager.constant.Province;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.Date;
 
 @Entity
@@ -51,6 +50,7 @@ public class User {
     @NotNull(message = "Giới tính không được để trống")
     Gender gender;
 
+    @MinAge(value = 16)
     LocalDate dateOfBirth;
 
     @Enumerated(EnumType.STRING)

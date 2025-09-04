@@ -1,7 +1,7 @@
 package com.example.football_field_manager.service;
 
-import com.example.football_field_manager.controller.UserController;
-import com.example.football_field_manager.dto.request.UserRequest;
+import com.example.football_field_manager.dto.request.UserCreateRequest;
+import com.example.football_field_manager.dto.request.UserUpdateInfoRequest;
 import com.example.football_field_manager.dto.response.UserResponse;
 import com.example.football_field_manager.entity.User;
 import com.example.football_field_manager.mapper.UserMapper;
@@ -37,7 +37,7 @@ public class UserService {
         return  userResponse;
     }
 
-    public UserResponse createUser(UserRequest request){
+    public UserResponse createUser(UserCreateRequest request){
         boolean checkExist = userRepository.existsByUsername(request.getUsername());
 
         if (checkExist){
@@ -52,5 +52,19 @@ public class UserService {
             log.info("==> [1000][POST] /user {}", new Date());
             return userResponse;
         }
+    }
+
+    public UserResponse updateInfoUserById(String userId, UserUpdateInfoRequest request){
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            log.error("==> [404][PUT] /user/{userId} {}", new Date());
+            throw new RuntimeException("Không tìm thấy người dùng");
+        });
+
+        userMapper.updateInfoUser(user, request);
+
+        log.info("==> [1000][PUT] /user/{userId} {}", new Date());
+        UserResponse userResponse = userMapper.toUserResponse(userRepository.save(user));
+
+        return userResponse;
     }
 }
