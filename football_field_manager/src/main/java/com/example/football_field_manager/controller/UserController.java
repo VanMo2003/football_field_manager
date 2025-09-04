@@ -24,6 +24,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     ApiResponse<UserResponse> getUserById(@PathVariable String userId) {
+        log.warn("call api [GET] /user/{userId} {}", new Date());
         ApiResponse<UserResponse> response = new ApiResponse<>();
         response.setData(userService.getUserById(userId));
         return response;

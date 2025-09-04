@@ -26,8 +26,12 @@ public class UserService {
     UserMapper userMapper;
 
     public UserResponse getUserById(String userId){
-        User user = userRepository.findById(userId).orElseThrow(() -> {throw new RuntimeException("Không tìm thấy người dùng");});
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            log.error("==> [404][GET] /user/{userId} {}", new Date());
+            throw new RuntimeException("Không tìm thấy người dùng");
+        });
 
+        log.info("==> [1000][GET] /user/{userId} {}", new Date());
         UserResponse userResponse = userMapper.toUserResponse(user);
 
         return  userResponse;
