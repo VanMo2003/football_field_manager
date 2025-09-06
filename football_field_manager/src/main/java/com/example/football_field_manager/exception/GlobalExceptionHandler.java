@@ -1,8 +1,13 @@
 package com.example.football_field_manager.exception;
 
 import com.example.football_field_manager.dto.response.ApiResponse;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -11,8 +16,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
-    ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException exception){
-        log.error("Exception: ", exception);
+    ResponseEntity<ApiResponse> handlingRuntimeException(Exception exception){
+        log.error("Exception: " + exception.getMessage());
 
         ApiResponse apiResponse = new ApiResponse();
 
@@ -24,6 +29,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = AppException.class)
     ResponseEntity<ApiResponse> handlingAppException(AppException exception) {
+        log.error("AppException:" + exception.getMessage());
         ErrorCode errorCode = exception.getErrorCode();
         ApiResponse apiResponse = new ApiResponse();
 
@@ -31,5 +37,40 @@ public class GlobalExceptionHandler {
         apiResponse.setMessage(errorCode.getMessage());
 
         return ResponseEntity.status(errorCode.getStatusCode()).body(apiResponse);
+    }
+
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    ResponseEntity<ApiResponse> handlingMethodArgumentNotValidException(MethodArgumentNotValidException exception){
+        log.error("MethodArgumentNotValidException : " + exception.getMessage());
+        ApiResponse apiResponse = new ApiResponse();
+
+        apiResponse.setCode(422);
+        apiResponse.setMessage(exception.getFieldError().getDefaultMessage());
+
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(apiResponse);
+    }
+
+    @ExceptionHandler(value = TransactionSystemException.class)
+    ResponseEntity<ApiResponse> handlingTransactionSystemException(TransactionSystemException exception){
+        log.error("TransactionSystemException : " + exception.getMessage());
+        Throwable cause = exception.getRootCause();
+        ApiResponse apiResponse = new ApiResponse();
+
+        if (cause instanceof ConstraintViolationException constraintViolationException) {
+            String message = constraintViolationException.getConstraintViolations()
+                    .stream()
+                    .map(cv -> cv.getPropertyPath() + " " + cv.getMessage())
+                    .findFirst()
+                    .orElse("Validation error");
+
+            apiResponse.setCode(422);
+            apiResponse.setMessage(message);
+
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(apiResponse);
+        }
+
+        apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
+        apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
+        return ResponseEntity.badRequest().body(apiResponse);
     }
 }

@@ -27,12 +27,12 @@ public class User {
     String id;
 
     @NotNull
-    @Length(min = 6, message = "Tài khoản phải có ít nhất 6 kí tự")
+    @Length(min = 3, message = "username must be at least 3 characters")
     String username;
 
 
     @NotNull
-    @Length(min = 6, message = "Mật khẩu phải có ít nhất 6 kí tự")
+    @Length(min = 6, message = "password must be at least 6 characters")
     String password;
 
     @Nullable

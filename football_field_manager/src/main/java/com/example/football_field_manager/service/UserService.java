@@ -4,6 +4,8 @@ import com.example.football_field_manager.dto.request.UserCreateRequest;
 import com.example.football_field_manager.dto.request.UserUpdateInfoRequest;
 import com.example.football_field_manager.dto.response.UserResponse;
 import com.example.football_field_manager.entity.User;
+import com.example.football_field_manager.exception.AppException;
+import com.example.football_field_manager.exception.ErrorCode;
 import com.example.football_field_manager.mapper.UserMapper;
 import com.example.football_field_manager.repository.UserRepository;
 import lombok.AccessLevel;
@@ -26,12 +28,8 @@ public class UserService {
     UserMapper userMapper;
 
     public UserResponse getUserById(String userId){
-        User user = userRepository.findById(userId).orElseThrow(() -> {
-            log.error("==> [404][GET] /user/{userId} {}", new Date());
-            throw new RuntimeException("Không tìm thấy người dùng");
-        });
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
 
-        log.info("==> [1000][GET] /user/{userId} {}", new Date());
         UserResponse userResponse = userMapper.toUserResponse(user);
 
         return  userResponse;
@@ -41,8 +39,7 @@ public class UserService {
         boolean checkExist = userRepository.existsByUsername(request.getUsername());
 
         if (checkExist){
-            log.error("==> [409][POST] /user {}", new Date());
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username đã tồn tại");
+            throw new AppException(ErrorCode.USER_EXISTED);
         }else{
             User user = userMapper.toUser(request);
 
@@ -55,10 +52,7 @@ public class UserService {
     }
 
     public UserResponse updateInfoUserById(String userId, UserUpdateInfoRequest request){
-        User user = userRepository.findById(userId).orElseThrow(() -> {
-            log.error("==> [404][PUT] /user/{userId} {}", new Date());
-            throw new RuntimeException("Không tìm thấy người dùng");
-        });
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
 
         userMapper.updateInfoUser(user, request);
 

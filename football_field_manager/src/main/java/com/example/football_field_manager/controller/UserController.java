@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    ApiResponse<UserResponse> updateInfoUserById(@PathVariable String userId, @RequestBody UserUpdateInfoRequest request){
+    ApiResponse<UserResponse> updateInfoUserById(@PathVariable String userId, @RequestBody @Valid UserUpdateInfoRequest request){
         log.warn("call api [PUT] /user/{userId} {}", new Date());
         ApiResponse<UserResponse> response = new ApiResponse<>();
         response.setData(userService.updateInfoUserById(userId, request));
