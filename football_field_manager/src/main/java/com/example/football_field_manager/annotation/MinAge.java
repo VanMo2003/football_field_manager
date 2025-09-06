@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MinAge {
     int value();
-    String message() default "Tuổi phải lớn hơn hoặc bằng {value}";
+    String message() default "Age must be greater than or equal to {value}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

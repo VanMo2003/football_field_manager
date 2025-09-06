@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
         if (cause instanceof ConstraintViolationException constraintViolationException) {
             String message = constraintViolationException.getConstraintViolations()
                     .stream()
-                    .map(cv -> cv.getPropertyPath() + " " + cv.getMessage())
+                    .map(cv -> cv.getMessage())
                     .findFirst()
                     .orElse("Validation error");
 
