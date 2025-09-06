@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatusCode;
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public enum ErrorCode {
-    UNCATEGORIZED_EXCEPTION(999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR)
+    UNCATEGORIZED_EXCEPTION(999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
+    USER_NOT_EXIST(1002, "User not exist", HttpStatus.NOT_FOUND),
+    USER_EXISTED(1001, "User existed", HttpStatus.CONFLICT),
     ;
     private final int code;
     private final String message;
