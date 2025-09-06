@@ -5,13 +5,13 @@ import com.example.football_field_manager.constant.Gender;
 import com.example.football_field_manager.constant.Province;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.Date;
 
 @Entity

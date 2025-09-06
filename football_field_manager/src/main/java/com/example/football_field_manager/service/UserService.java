@@ -6,6 +6,7 @@ import com.example.football_field_manager.dto.response.UserResponse;
 import com.example.football_field_manager.entity.User;
 import com.example.football_field_manager.exception.AppException;
 import com.example.football_field_manager.exception.ErrorCode;
+import com.example.football_field_manager.dto.request.UserRequest;
 import com.example.football_field_manager.mapper.UserMapper;
 import com.example.football_field_manager.repository.UserRepository;
 import lombok.AccessLevel;

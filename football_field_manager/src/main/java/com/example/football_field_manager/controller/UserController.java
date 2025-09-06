@@ -38,7 +38,6 @@ public class UserController {
         response.setData(userService.createUser(request));
         return response;
     }
-
     @PutMapping("/{userId}")
     ApiResponse<UserResponse> updateInfoUserById(@PathVariable String userId, @RequestBody @Valid UserUpdateInfoRequest request){
         log.warn("call api [PUT] /user/{userId} {}", new Date());
