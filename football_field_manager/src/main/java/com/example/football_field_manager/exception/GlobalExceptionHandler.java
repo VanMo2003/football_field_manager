@@ -1,6 +1,7 @@
 package com.example.football_field_manager.exception;
 
 import com.example.football_field_manager.dto.response.ApiResponse;
+import com.nimbusds.jose.JOSEException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,8 @@ import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.text.ParseException;
 
 @ControllerAdvice
 @Slf4j
@@ -22,6 +25,17 @@ public class GlobalExceptionHandler {
 
         apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
         apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
+
+        return ResponseEntity.badRequest().body(apiResponse);
+    }
+
+    @ExceptionHandler(value = { ParseException.class, JOSEException.class })
+    ResponseEntity<ApiResponse> handleJwtException(Exception exception){
+        log.error("JWT Exception: " + exception.getMessage());
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setCode(ErrorCode.INVALID_TOKEN.getCode());
+        apiResponse.setMessage("Invalid or malformed JWT token");
 
         return ResponseEntity.badRequest().body(apiResponse);
     }

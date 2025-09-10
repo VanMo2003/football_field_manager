@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatusCode;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
+
     USER_NOT_EXIST(1001, "User not exist", HttpStatus.NOT_FOUND),
     USER_EXISTED(1002, "User existed", HttpStatus.CONFLICT),
     INCORRECT_ACCOUNT_OR_PASSWORD(1003, "Incorrect account or password", HttpStatus.BAD_REQUEST),

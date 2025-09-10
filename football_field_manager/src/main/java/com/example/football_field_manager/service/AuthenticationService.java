@@ -2,14 +2,18 @@ package com.example.football_field_manager.service;
 
 
 import com.example.football_field_manager.dto.request.AuthenticationRequest;
+import com.example.football_field_manager.dto.request.IntrospectRequest;
 import com.example.football_field_manager.dto.response.AuthenticationResponse;
+import com.example.football_field_manager.dto.response.IntrospectResponse;
 import com.example.football_field_manager.entity.User;
 import com.example.football_field_manager.exception.AppException;
 import com.example.football_field_manager.exception.ErrorCode;
 import com.example.football_field_manager.repository.UserRepository;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,6 +24,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
 
+import java.text.ParseException;
 import java.util.Date;
 
 
@@ -36,6 +41,24 @@ public class AuthenticationService {
     @Value("${jwt.access-token-expiration}")
     long ACCESS_TOKEN_TIME_EXPIRATION;
     UserRepository userRepository;
+
+    public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
+        var token = request.getToken();
+
+        JWSVerifier jwsVerifier = new MACVerifier(SIGNER_KEY.getBytes());
+
+        SignedJWT signedJWT = SignedJWT.parse(token);
+
+        var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        var verified = signedJWT.verify(jwsVerifier);
+
+        log.info("==> [1000][POST] /user/introspect");
+
+        return IntrospectResponse.builder()
+                .valid(verified && expiryTime.after(new Date()))
+                .build();
+    }
 
     public AuthenticationResponse authentication(AuthenticationRequest request) {
         try {
