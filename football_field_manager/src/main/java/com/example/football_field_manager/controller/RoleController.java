@@ -39,4 +39,13 @@ public class RoleController {
         log.info("==> [1000][POST] /role");
         return response;
     }
+
+    @PutMapping
+    ApiResponse<RoleResponse> updateUser(@RequestBody @Valid RoleRequest request) {
+        log.warn("call api [PUT] /role");
+        ApiResponse<RoleResponse> response = new ApiResponse<>();
+        response.setData(roleService.updateRole(request));
+        log.info("==> [1000][PUT] /role");
+        return response;
+    }
 }

@@ -33,4 +33,12 @@ public class RoleService {
         Role role = roleMapper.toRole(request);
         return roleMapper.toRoleResponse(roleRepository.save(role));
     }
+
+    public RoleResponse updateRole(RoleRequest request){
+        Role role = roleRepository.findById(request.getName()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXIST));
+
+        roleMapper.updateRole(role, request);
+
+        return roleMapper.toRoleResponse(roleRepository.save(role));
+    }
 }
