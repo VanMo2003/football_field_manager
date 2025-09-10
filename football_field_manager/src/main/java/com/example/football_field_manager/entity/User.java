@@ -60,6 +60,9 @@ public class User {
     @Nullable
     String address;
 
+    @ManyToOne
+    Role roles;
+
     @NotNull
     boolean active;
 
