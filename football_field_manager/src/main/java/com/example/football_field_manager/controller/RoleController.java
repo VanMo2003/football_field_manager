@@ -48,4 +48,13 @@ public class RoleController {
         log.info("==> [1000][PUT] /role");
         return response;
     }
+
+    @DeleteMapping("/{name}")
+    ApiResponse<String> deleteRole(@PathVariable String name) {
+        log.warn("call api [DELETE] /role");
+        roleService.deleteRole(name);
+        ApiResponse<String> response = ApiResponse.<String>builder().data("Role has been deleted").build();
+        log.info("==> [1000][PUT] /role");
+        return response;
+    }
 }

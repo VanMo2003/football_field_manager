@@ -41,4 +41,9 @@ public class RoleService {
 
         return roleMapper.toRoleResponse(roleRepository.save(role));
     }
+
+    public void deleteRole(String name) {
+        roleRepository.deleteById(name);
+    }
+
 }
