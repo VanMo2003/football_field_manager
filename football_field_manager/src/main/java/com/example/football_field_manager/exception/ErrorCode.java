@@ -13,11 +13,11 @@ public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
     USER_NOT_EXIST(1001, "User not exist", HttpStatus.NOT_FOUND),
     USER_EXISTED(1002, "User existed", HttpStatus.CONFLICT),
-    ROLE_NOT_EXIST(103, "Role not exist", HttpStatus.NOT_FOUND),
-    ROLE_EXISTED(1004, "Role existed", HttpStatus.CONFLICT),
-
-
+    INCORRECT_ACCOUNT_OR_PASSWORD(1003, "Incorrect account or password", HttpStatus.BAD_REQUEST),
+    ROLE_NOT_EXIST(1004, "Role not exist", HttpStatus.NOT_FOUND),
+    ROLE_EXISTED(1005, "Role existed", HttpStatus.CONFLICT)
     ;
+
     private final int code;
     private final String message;
     private final HttpStatusCode statusCode;

@@ -2,7 +2,6 @@ package com.example.football_field_manager.exception;
 
 import com.example.football_field_manager.dto.response.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

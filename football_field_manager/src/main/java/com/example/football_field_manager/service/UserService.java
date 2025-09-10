@@ -6,7 +6,6 @@ import com.example.football_field_manager.dto.response.UserResponse;
 import com.example.football_field_manager.entity.User;
 import com.example.football_field_manager.exception.AppException;
 import com.example.football_field_manager.exception.ErrorCode;
-import com.example.football_field_manager.dto.request.UserRequest;
 import com.example.football_field_manager.mapper.UserMapper;
 import com.example.football_field_manager.repository.UserRepository;
 import lombok.AccessLevel;
@@ -14,9 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 

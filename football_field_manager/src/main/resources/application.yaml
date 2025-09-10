@@ -1,3 +1,7 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /ffm
 spring:
   application:
     name: football_field_manager
@@ -9,8 +13,5 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-server:
-  port: 8080
-  servlet:
-    context-path: /ffm
+
 
