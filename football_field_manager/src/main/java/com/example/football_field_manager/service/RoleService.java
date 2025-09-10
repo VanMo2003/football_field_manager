@@ -12,12 +12,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RoleService {
     RoleRepository roleRepository;
     RoleMapper roleMapper;
+
+    public List<RoleResponse> getAllRole() {
+        return roleRepository.findAll().stream().map(roleMapper::toRoleResponse).toList();
+    }
     public RoleResponse createRole(RoleRequest request){
         boolean isExisted = roleRepository.existsById(request.getName());
 
