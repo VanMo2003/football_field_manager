@@ -11,6 +11,7 @@ import com.example.football_field_manager.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,8 @@ import java.util.Date;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class UserService {
-    private static final Logger log = LoggerFactory.getLogger(UserService.class);
     UserRepository userRepository;
     UserMapper userMapper;
 
@@ -44,7 +45,7 @@ public class UserService {
             userRepository.save(user);
             UserResponse userResponse = userMapper.toUserResponse(user);
 
-            log.info("==> [1000][POST] /user {}", new Date());
+            log.info("==> [1000][POST] /user");
             return userResponse;
         }
     }
@@ -54,7 +55,7 @@ public class UserService {
 
         userMapper.updateInfoUser(user, request);
 
-        log.info("==> [1000][PUT] /user/{userId} {}", new Date());
+        log.info("==> [1000][PUT] /user/{userId}");
         UserResponse userResponse = userMapper.toUserResponse(userRepository.save(user));
 
         return userResponse;

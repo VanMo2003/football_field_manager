@@ -3,26 +3,87 @@ package com.example.football_field_manager.service;
 
 import com.example.football_field_manager.dto.request.AuthenticationRequest;
 import com.example.football_field_manager.dto.response.AuthenticationResponse;
+import com.example.football_field_manager.entity.User;
 import com.example.football_field_manager.exception.AppException;
 import com.example.football_field_manager.exception.ErrorCode;
 import com.example.football_field_manager.repository.UserRepository;
+import com.nimbusds.jose.*;
+import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jwt.JWTClaimsSet;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.CannotCreateTransactionException;
+
+import java.util.Date;
 
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class AuthenticationService {
-    UserRepository userRepository;
-    public AuthenticationResponse authentication(AuthenticationRequest request)  {
-        AuthenticationResponse authenticationResponse = new AuthenticationResponse();
+    @NonFinal
+    @Value("${jwt.signer-key}")
+    protected String SIGNER_KEY;
 
-        authenticationResponse.setAuthenticated(userRepository.findByUsername(request.getUsername())
-                .map(user -> request.getPassword().equals(user.getPassword()))
-                .orElseThrow(() -> new AppException(ErrorCode.INCORRECT_ACCOUNT_OR_PASSWORD)));
-        return authenticationResponse;
+    @NonFinal
+    @Value("${jwt.access-token-expiration}")
+    long ACCESS_TOKEN_TIME_EXPIRATION;
+    UserRepository userRepository;
+
+    public AuthenticationResponse authentication(AuthenticationRequest request) {
+        try {
+            User user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> {
+                throw new AppException(ErrorCode.INCORRECT_ACCOUNT_OR_PASSWORD);
+            });
+
+            boolean authenticated = request.getPassword().equals(user.getPassword());
+            if (!authenticated){
+                throw new AppException(ErrorCode.INCORRECT_ACCOUNT_OR_PASSWORD);
+            }
+
+            String token = generateToken(user.getUsername());
+
+            log.info("==> [1000][POST] /user/login");
+            return AuthenticationResponse.builder()
+                    .authenticated(true)
+                    .token(token)
+                    .build();
+        }catch (DataAccessException | CannotCreateTransactionException e){
+            throw new AppException(ErrorCode.CANNOT_CONNECT_TO_SERVER);
+        }
+    }
+
+    public String generateToken(String username) {
+        JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
+
+        Date creationTime = new Date();
+        Date expiryTime = new Date(creationTime.getTime() + ACCESS_TOKEN_TIME_EXPIRATION * 1000);
+
+        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
+                .subject(username)
+                .issuer("vanmo.com")
+                .issueTime(creationTime)
+                .expirationTime(expiryTime)
+                .build();
+
+        Payload payload = new Payload(jwtClaimsSet.toJSONObject());
+
+        JWSObject jwsObject = new JWSObject(jwsHeader, payload);
+
+        try {
+            jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
+
+            return jwsObject.serialize();
+        } catch (JOSEException e) {
+            log.error("Cannot create token", e);
+            throw new RuntimeException(e);
+        }
     }
 }

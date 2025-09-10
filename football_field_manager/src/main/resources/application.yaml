@@ -6,12 +6,18 @@ spring:
   application:
     name: football_field_manager
   datasource:
-    url: "jdbc:mysql://localhost:3306/football_field_manager"
+    url: jdbc:mysql://localhost:3306/football_field_manager
     username: root
     password: 03092003
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+jwt:
+  signer-key: kjndbGn4Mr++6lXA6yeDSYpVM29E2LJD8fvLkPRvQClKlpJFMuEJCTtgYDdF68lS
+  access-token-expiration: 900
+
+
 
 
