@@ -23,6 +23,7 @@ public class UserCreateRequest {
     LocalDate dateOfBirth;
     Province hometown;
     String address;
+    String role = "USER";
 
     boolean active = true;
 

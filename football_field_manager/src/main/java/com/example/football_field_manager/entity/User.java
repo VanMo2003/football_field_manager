@@ -61,7 +61,7 @@ public class User {
     String address;
 
     @ManyToOne
-    Role roles;
+    Role role;
 
     @NotNull
     boolean active;
