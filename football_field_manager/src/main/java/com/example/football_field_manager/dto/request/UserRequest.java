@@ -2,6 +2,8 @@ package com.example.football_field_manager.dto.request;
 
 import com.example.football_field_manager.constant.Gender;
 import com.example.football_field_manager.constant.Province;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,8 +20,10 @@ public class UserRequest {
     String password;
     String fullName;
     String phoneNumber;
+    @Enumerated(EnumType.STRING)
     Gender gender;
     LocalDate dateOfBirth;
+    @Enumerated(EnumType.STRING)
     Province hometown;
     String address;
 

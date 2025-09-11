@@ -14,15 +14,15 @@ import com.example.football_field_manager.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@Slf4j
 public class UserService {
+    PasswordEncoder passwordEncoder;
     UserRepository userRepository;
     UserMapper userMapper;
     RoleRepository roleRepository;
@@ -44,15 +44,17 @@ public class UserService {
             throw new AppException(ErrorCode.USER_EXISTED);
         }else{
             User user = userMapper.toUser(request);
-            Role role = roleRepository.findById(request.getRole()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXIST));
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
 
+            Role role = roleRepository.findById(request.getRole()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXIST));
             user.setRole(role);
+
+            user.setGender(request.getGender().getGender());
+            user.setHometown(request.getHometown().getHometown());
 
             userRepository.save(user);
             UserResponse userResponse = userMapper.toUserResponse(user);
             userResponse.setRole(roleMapper.toRoleResponse(role));
-
-            log.info("==> [1000][POST] /user");
             return userResponse;
         }
     }
@@ -62,9 +64,9 @@ public class UserService {
 
         userMapper.updateInfoUser(user, request);
 
-        log.info("==> [1000][PUT] /user/{userId}");
         UserResponse userResponse = userMapper.toUserResponse(userRepository.save(user));
-        userResponse.setRole(roleMapper.toRoleResponse(user.getRole()));
+        user.setGender(request.getGender().getGender());
+        user.setHometown(request.getHometown().getHometown());
 
         return userResponse;
     }

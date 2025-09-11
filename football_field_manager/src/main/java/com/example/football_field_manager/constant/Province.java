@@ -68,21 +68,21 @@ public enum Province {
     VINH_PHUC("Vĩnh Phúc"),
     YEN_BAI("Yên Bái");
 
-    private final String displayName;
+    private final String hometown;
 
-    Province(String displayName) {
-        this.displayName = displayName;
+    Province(String hometown) {
+        this.hometown = hometown;
     }
 
     @JsonValue
-    public String getDisplayName() {
-        return displayName;
+    public String getHometown() {
+        return hometown;
     }
 
     @JsonCreator
     public static Province fromValue(String value) {
         for (Province p : values()) {
-            if (p.displayName.equalsIgnoreCase(value)) {
+            if (p.hometown.equalsIgnoreCase(value)) {
                 return p;
             }
         }

@@ -1,8 +1,5 @@
 package com.example.football_field_manager.dto.response;
 
-import com.example.football_field_manager.constant.Gender;
-import com.example.football_field_manager.constant.Province;
-import com.example.football_field_manager.entity.Role;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -21,9 +18,9 @@ public class UserResponse {
     String username;
     String fullName;
     String phoneNumber;
-    Gender gender;
+    String gender;
     LocalDate dateOfBirth;
-    Province hometown;
+    String hometown;
     String address;
     RoleResponse role;
 

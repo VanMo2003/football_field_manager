@@ -28,6 +28,7 @@ public class UserController {
         log.warn("call api [GET] /user/{userId} {}", new Date());
         ApiResponse<UserResponse> response = new ApiResponse<>();
         response.setData(userService.getUserById(userId));
+        log.warn("call api [GET] /user/{userId} {}", new Date());
         return response;
     }
 
@@ -36,6 +37,7 @@ public class UserController {
         log.warn("call api [POST] /user {}", new Date());
         ApiResponse<UserResponse> response = new ApiResponse<>();
         response.setData(userService.createUser(request));
+        log.info("==> [1000][POST] /user");
         return response;
     }
     @PutMapping("/{userId}")
@@ -43,6 +45,7 @@ public class UserController {
         log.warn("call api [PUT] /user/{userId} {}", new Date());
         ApiResponse<UserResponse> response = new ApiResponse<>();
         response.setData(userService.updateInfoUserById(userId, request));
+        log.info("==> [1000][PUT] /user/{userId}");
         return response;
     }
 }

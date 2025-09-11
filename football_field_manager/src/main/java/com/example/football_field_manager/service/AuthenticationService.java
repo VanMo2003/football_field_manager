@@ -21,6 +21,7 @@ import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
 
@@ -33,6 +34,7 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class AuthenticationService {
+    PasswordEncoder passwordEncoder;
     @NonFinal
     @Value("${jwt.signer-key}")
     protected String SIGNER_KEY;
@@ -66,7 +68,7 @@ public class AuthenticationService {
                 throw new AppException(ErrorCode.INCORRECT_ACCOUNT_OR_PASSWORD);
             });
 
-            boolean authenticated = request.getPassword().equals(user.getPassword());
+            boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
             if (!authenticated){
                 throw new AppException(ErrorCode.INCORRECT_ACCOUNT_OR_PASSWORD);
             }

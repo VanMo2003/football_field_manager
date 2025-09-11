@@ -18,7 +18,6 @@ public class UserUpdateInfoRequest {
     String fullName;
     String phoneNumber;
     Gender gender;
-
     LocalDate dateOfBirth;
     Province hometown;
     String address;
