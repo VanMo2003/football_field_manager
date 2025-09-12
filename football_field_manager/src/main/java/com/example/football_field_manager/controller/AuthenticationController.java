@@ -31,6 +31,7 @@ public class AuthenticationController {
         log.warn("call api [POST] /auth/login {}", new Date());
         ApiResponse<AuthenticationResponse> response = new ApiResponse<>();
         response.setData(authenticationService.authentication(request));
+        log.info("==> [1000][POST] /user/login");
         return response;
     }
 
@@ -39,6 +40,7 @@ public class AuthenticationController {
         log.warn("call api [POST] /auth/introspect {}", new Date());
         ApiResponse<IntrospectResponse> response = new ApiResponse<>();
         response.setData(authenticationService.introspect(request));
+        log.info("==> [1000][POST] /user/introspect");
         return response;
     }
 }

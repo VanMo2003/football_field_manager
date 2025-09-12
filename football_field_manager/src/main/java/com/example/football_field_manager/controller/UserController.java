@@ -11,9 +11,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -23,12 +25,26 @@ public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     UserService userService;
 
+    @GetMapping
+    ApiResponse<List<UserResponse>> getAllUsers() {
+        log.warn("call api [GET] /user {}", new Date());
+
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info("Username : {}", authentication.getName());
+        authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
+
+        ApiResponse<List<UserResponse>> response = new ApiResponse<>();
+        response.setData(userService.getAllUsers());
+        log.info("==> [1000][GET] /user");
+        return response;
+    }
+
     @GetMapping("/{userId}")
     ApiResponse<UserResponse> getUserById(@PathVariable String userId) {
         log.warn("call api [GET] /user/{userId} {}", new Date());
         ApiResponse<UserResponse> response = new ApiResponse<>();
         response.setData(userService.getUserById(userId));
-        log.warn("call api [GET] /user/{userId} {}", new Date());
+        log.info("==> [1000][GET] /user/{userId}");
         return response;
     }
 

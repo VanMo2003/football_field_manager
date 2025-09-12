@@ -6,6 +6,7 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,7 +20,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ApiResponse> handlingRuntimeException(Exception exception){
-        log.error("Exception : " + exception.getMessage());
+        log.error("Exception : " + exception);
 
         ApiResponse apiResponse = new ApiResponse();
 
@@ -40,10 +41,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
-    @ExceptionHandler(value = AppException.class)
-    ResponseEntity<ApiResponse> handlingAppException(AppException exception) {
+    @ExceptionHandler(value = {AppException.class, AuthorizationDeniedException.class})
+    ResponseEntity<ApiResponse> handlingAppException(Exception exception) {
         log.error("AppException : " + exception.getMessage());
-        ErrorCode errorCode = exception.getErrorCode();
+        ErrorCode errorCode = (exception instanceof AppException)
+                ? ((AppException) exception).getErrorCode()
+                : ErrorCode.ACCESS_DENIED;
+
         ApiResponse apiResponse = new ApiResponse();
 
         apiResponse.setCode(errorCode.getCode());

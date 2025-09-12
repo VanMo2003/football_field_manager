@@ -14,8 +14,12 @@ import com.example.football_field_manager.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -28,6 +32,18 @@ public class UserService {
     RoleRepository roleRepository;
     RoleMapper roleMapper;
 
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserResponse> getAllUsers(){
+        List<UserResponse> users = userRepository.findAll().stream().map(user -> {
+            UserResponse userResponse = userMapper.toUserResponse(user);
+            userResponse.setRole(roleMapper.toRoleResponse(user.getRole()));
+            return userResponse;
+        }).toList();
+
+        return  users;
+    }
+
+    @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse getUserById(String userId){
         User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
 
@@ -59,6 +75,7 @@ public class UserService {
         }
     }
 
+    @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse updateInfoUserById(String userId, UserUpdateInfoRequest request){
         User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
 

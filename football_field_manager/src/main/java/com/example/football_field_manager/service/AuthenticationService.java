@@ -1,10 +1,12 @@
 package com.example.football_field_manager.service;
 
 
+import com.example.football_field_manager.constant.PredefinedRole;
 import com.example.football_field_manager.dto.request.AuthenticationRequest;
 import com.example.football_field_manager.dto.request.IntrospectRequest;
 import com.example.football_field_manager.dto.response.AuthenticationResponse;
 import com.example.football_field_manager.dto.response.IntrospectResponse;
+import com.example.football_field_manager.entity.Role;
 import com.example.football_field_manager.entity.User;
 import com.example.football_field_manager.exception.AppException;
 import com.example.football_field_manager.exception.ErrorCode;
@@ -27,6 +29,8 @@ import org.springframework.transaction.CannotCreateTransactionException;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 
 @Service
@@ -55,8 +59,6 @@ public class AuthenticationService {
 
         var verified = signedJWT.verify(jwsVerifier);
 
-        log.info("==> [1000][POST] /user/introspect");
-
         return IntrospectResponse.builder()
                 .valid(verified && expiryTime.after(new Date()))
                 .build();
@@ -73,9 +75,8 @@ public class AuthenticationService {
                 throw new AppException(ErrorCode.INCORRECT_ACCOUNT_OR_PASSWORD);
             }
 
-            String token = generateToken(user.getUsername());
+            String token = generateToken(user);
 
-            log.info("==> [1000][POST] /user/login");
             return AuthenticationResponse.builder()
                     .authenticated(true)
                     .token(token)
@@ -85,14 +86,15 @@ public class AuthenticationService {
         }
     }
 
-    public String generateToken(String username) {
+    public String generateToken(User user) {
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
 
         Date creationTime = new Date();
         Date expiryTime = new Date(creationTime.getTime() + ACCESS_TOKEN_TIME_EXPIRATION * 1000);
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(username)
+                .subject(user.getUsername())
+                .claim("scope", buildScope(user.getRole()))
                 .issuer("vanmo.com")
                 .issueTime(creationTime)
                 .expirationTime(expiryTime)
@@ -110,5 +112,11 @@ public class AuthenticationService {
             log.error("Cannot create token", e);
             throw new RuntimeException(e);
         }
+    }
+
+    private String buildScope(Role role){
+        if (!Objects.isNull(role))
+            return role.getName();
+        return "";
     }
 }
