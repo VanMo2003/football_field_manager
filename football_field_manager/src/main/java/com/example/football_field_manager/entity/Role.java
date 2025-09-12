@@ -5,7 +5,6 @@ import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-
 @Entity
 @Getter
 @Setter

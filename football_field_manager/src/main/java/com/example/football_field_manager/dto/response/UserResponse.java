@@ -1,7 +1,6 @@
 package com.example.football_field_manager.dto.response;
 
-import com.example.football_field_manager.constant.Gender;
-import com.example.football_field_manager.constant.Province;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -13,15 +12,17 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserResponse {
     String id;
     String username;
     String fullName;
     String phoneNumber;
-    Gender gender;
+    String gender;
     LocalDate dateOfBirth;
-    Province hometown;
+    String hometown;
     String address;
+    RoleResponse role;
 
     boolean active;
 

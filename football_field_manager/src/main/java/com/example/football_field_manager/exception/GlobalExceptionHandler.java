@@ -1,15 +1,18 @@
 package com.example.football_field_manager.exception;
 
 import com.example.football_field_manager.dto.response.ApiResponse;
+import com.nimbusds.jose.JOSEException;
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.text.ParseException;
 
 @ControllerAdvice
 @Slf4j
@@ -17,7 +20,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ApiResponse> handlingRuntimeException(Exception exception){
-        log.error("Exception: " + exception.getMessage());
+        log.error("Exception : " + exception);
 
         ApiResponse apiResponse = new ApiResponse();
 
@@ -27,10 +30,24 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
-    @ExceptionHandler(value = AppException.class)
-    ResponseEntity<ApiResponse> handlingAppException(AppException exception) {
-        log.error("AppException:" + exception.getMessage());
-        ErrorCode errorCode = exception.getErrorCode();
+    @ExceptionHandler(value = { ParseException.class, JOSEException.class })
+    ResponseEntity<ApiResponse> handleJwtException(Exception exception){
+        log.error("JWT Exception: " + exception.getMessage());
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setCode(ErrorCode.INVALID_TOKEN.getCode());
+        apiResponse.setMessage("Invalid or malformed JWT token");
+
+        return ResponseEntity.badRequest().body(apiResponse);
+    }
+
+    @ExceptionHandler(value = {AppException.class, AuthorizationDeniedException.class})
+    ResponseEntity<ApiResponse> handlingAppException(Exception exception) {
+        log.error("AppException : " + exception.getMessage());
+        ErrorCode errorCode = (exception instanceof AppException)
+                ? ((AppException) exception).getErrorCode()
+                : ErrorCode.ACCESS_DENIED;
+
         ApiResponse apiResponse = new ApiResponse();
 
         apiResponse.setCode(errorCode.getCode());

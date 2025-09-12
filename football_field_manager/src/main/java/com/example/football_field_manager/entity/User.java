@@ -43,25 +43,24 @@ public class User {
             regexp = "0\\d{9}",
             message = "Số điện thoại phải bắt đầu bằng 0 và có đúng 10 chữ số"
     )
-    @NonNull
+    @Nullable
     String phoneNumber;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull(message = "Giới tính không được để trống")
-    Gender gender;
+    @Nullable
+    String gender;
 
     @MinAge(value = 16)
+    @Nullable
     LocalDate dateOfBirth;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull(message = "Tỉnh/Thành không được để trống")
-    Province hometown;
+    @Nullable
+    String hometown;
 
     @Nullable
     String address;
 
     @ManyToOne
-    Role roles;
+    Role role;
 
     @NotNull
     boolean active;
