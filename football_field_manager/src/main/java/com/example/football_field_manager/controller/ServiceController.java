@@ -32,11 +32,22 @@ public class ServiceController {
     }
 
     @PutMapping("/{id}")
-    ApiResponse<ServiceResponse> updateService(@PathVariable Long id,@RequestBody @Valid ServiceRequest request){
+    ApiResponse<ServiceResponse> updateService(@PathVariable Long id, @RequestBody @Valid ServiceRequest request){
         log.warn("call api [PUT] /service");
         ApiResponse<ServiceResponse> response = new ApiResponse<>();
         response.setData(serviceService.updateService(id, request));
         log.info("==> [1000][PUT] /service");
         return response;
     }
+
+    @DeleteMapping("/{id}")
+    ApiResponse<String> deleteService(@PathVariable Long id){
+        log.warn("call api [DELETE] /service");
+        serviceService.deleteService(id);
+        log.info("==> [1000][DELETE] /service");
+        return ApiResponse.<String>builder()
+                .data("Service has been deleted")
+                .build();
+    }
+
 }

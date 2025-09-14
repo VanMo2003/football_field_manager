@@ -37,4 +37,8 @@ public class ServiceService {
 
         return serviceResponse;
     }
+
+    public void deleteService(Long id){
+        serviceRepository.deleteById(id);
+    }
 }
