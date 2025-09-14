@@ -28,5 +28,12 @@ public class TimeSlotController {
         log.info("==> [1000][POST] /timeslot");
         return response;
     }
-
+    @PutMapping("/{id}")
+    ApiResponse<TimeSlotResponse> updateTimeSlot(@PathVariable Long id,@RequestBody @Valid TimeSlotRequest request){
+        log.warn("call api [PUT] /timeslot");
+        ApiResponse<TimeSlotResponse> response = new ApiResponse<>();
+        response.setData(timeSlotService.updateTimeSlot(id, request));
+        log.info("==> [1000][PUT] /timeslot");
+        return response;
+    }
 }
