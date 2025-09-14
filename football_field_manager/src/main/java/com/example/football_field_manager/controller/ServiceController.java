@@ -12,10 +12,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/service")
@@ -26,11 +23,20 @@ public class ServiceController {
     ServiceService serviceService;
 
     @PostMapping
-    ApiResponse<ServiceResponse> createUser(@RequestBody @Valid ServiceRequest request) {
+    ApiResponse<ServiceResponse> createService(@RequestBody @Valid ServiceRequest request) {
         log.warn("call api [POST] /service");
         ApiResponse<ServiceResponse> response = new ApiResponse<>();
         response.setData(serviceService.createService(request));
         log.info("==> [1000][POST] /service");
+        return response;
+    }
+
+    @PutMapping("/{id}")
+    ApiResponse<ServiceResponse> updateService(@PathVariable Long id,@RequestBody @Valid ServiceRequest request){
+        log.warn("call api [PUT] /service");
+        ApiResponse<ServiceResponse> response = new ApiResponse<>();
+        response.setData(serviceService.updateService(id, request));
+        log.info("==> [1000][PUT] /service");
         return response;
     }
 }

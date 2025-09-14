@@ -18,7 +18,9 @@ public enum ErrorCode {
     USER_EXISTED(1005, "User existed", HttpStatus.CONFLICT),
     INCORRECT_ACCOUNT_OR_PASSWORD(1006, "Incorrect account or password", HttpStatus.BAD_REQUEST),
     ROLE_NOT_EXIST(1007, "Role not exist", HttpStatus.NOT_FOUND),
-    ROLE_EXISTED(1008, "Role existed", HttpStatus.CONFLICT)
+    ROLE_EXISTED(1008, "Role existed", HttpStatus.CONFLICT),
+    SERVICE_NOT_EXIST(1007, "Service not exist", HttpStatus.NOT_FOUND),
+    SERVICE_EXISTED(1008, "Service existed", HttpStatus.CONFLICT)
     ;
 
     private final int code;
