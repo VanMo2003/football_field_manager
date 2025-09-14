@@ -36,4 +36,14 @@ public class TimeSlotController {
         log.info("==> [1000][PUT] /timeslot");
         return response;
     }
+
+    @DeleteMapping("/{id}")
+    ApiResponse<String> deleteTimeSlot(@PathVariable Long id){
+        log.warn("call api [DELETE] /timeslot");
+        timeSlotService.deleteTimeSlotById(id);
+        log.info("==> [1000][DELETE] /timeslot");
+        return ApiResponse.<String>builder()
+                .data("Timeslot has been deleted")
+                .build();
+    }
 }

@@ -39,4 +39,8 @@ public class TimeSlotService {
 
         return timeSlotResponse;
     }
+
+    public void deleteTimeSlotById(Long id){
+        timeSlotRepository.deleteById(id);
+    }
 }
