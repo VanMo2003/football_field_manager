@@ -67,6 +67,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(apiResponse);
     }
 
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    ResponseEntity<ApiResponse> handlingConstraintViolationException(ConstraintViolationException exception){
+        log.error("MethodArgumentNotValidException : " + exception.getMessage());
+        ApiResponse apiResponse = new ApiResponse();
+
+        apiResponse.setCode(422);
+        apiResponse.setMessage(exception.getConstraintViolations().stream().findFirst().get().getMessageTemplate());
+
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(apiResponse);
+    }
+
     @ExceptionHandler(value = TransactionSystemException.class)
     ResponseEntity<ApiResponse> handlingTransactionSystemException(TransactionSystemException exception){
         log.error("TransactionSystemException : " + exception.getMessage());

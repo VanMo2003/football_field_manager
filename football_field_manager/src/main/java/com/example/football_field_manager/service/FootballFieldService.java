@@ -1,0 +1,48 @@
+package com.example.football_field_manager.service;
+
+import com.example.football_field_manager.dto.request.FootballFieldRequest;
+import com.example.football_field_manager.dto.response.FootballFieldResponse;
+import com.example.football_field_manager.entity.FootballField;
+import com.example.football_field_manager.entity.User;
+import com.example.football_field_manager.exception.AppException;
+import com.example.football_field_manager.exception.ErrorCode;
+import com.example.football_field_manager.mapper.FootballFieldMapper;
+import com.example.football_field_manager.mapper.UserMapper;
+import com.example.football_field_manager.repository.FootballFieldRepository;
+import com.example.football_field_manager.repository.UserRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+public class FootballFieldService {
+    FootballFieldRepository footballFieldRepository;
+    FootballFieldMapper footballFieldMapper;
+    UserRepository userRepository;
+    UserMapper userMapper;
+
+    public FootballFieldResponse createFootballField(FootballFieldRequest request){
+        Optional<FootballField> footballFieldFind = footballFieldRepository.findByName(request.getName());
+
+        if (footballFieldFind.isPresent()) throw new AppException(ErrorCode.FOOTBALL_FIELD_EXISTED);
+
+        FootballField footballField = footballFieldMapper.toFootballField(request);
+
+        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+
+        if (footballFieldRepository.findByUser(user).isPresent()) throw new AppException(ErrorCode.USER_OF_FOOTBALL_FIELD_EXISTED);
+
+        footballField.setUser(user);
+        footballFieldRepository.save(footballField);
+
+        FootballFieldResponse footballFieldResponse = footballFieldMapper.toFootballFieldResponse(footballField);
+        footballFieldResponse.setUser(userMapper.toUserResponse(user));
+
+        return footballFieldResponse;
+    }
+}
