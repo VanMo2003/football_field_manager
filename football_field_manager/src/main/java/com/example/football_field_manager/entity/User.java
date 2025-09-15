@@ -1,8 +1,6 @@
 package com.example.football_field_manager.entity;
 
 import com.example.football_field_manager.annotation.MinAge;
-import com.example.football_field_manager.constant.Gender;
-import com.example.football_field_manager.constant.Province;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
