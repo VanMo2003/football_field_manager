@@ -13,6 +13,7 @@ import com.example.football_field_manager.repository.TimeSlotRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class TimeSlotService {
     TimeSlotMapper timeSlotMapper;
     FootballFieldRepository footballFieldRepository;
 
+    @PreAuthorize("hasRole('MANEGE')")
     public List<TimeSlotResponse> getAllTimeSlotByFootballField(Long footballFieldId){
         FootballField footballField = footballFieldRepository.findById(footballFieldId).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
 
@@ -40,6 +42,7 @@ public class TimeSlotService {
         return timeSlotResponses;
     }
 
+    @PreAuthorize("hasRole('MANEGE')")
     public TimeSlotResponse createTimeSlot(TimeSlotRequest request){
         FootballField footballField = footballFieldRepository.findById(request.getFootballFieldId()).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
 
@@ -59,6 +62,7 @@ public class TimeSlotService {
         return timeSlotResponse;
     }
 
+    @PreAuthorize("hasRole('MANEGE')")
     public TimeSlotResponse updateTimeSlot(Long id, TimeSlotRequest request){
         TimeSlot timeSlot = timeSlotRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TIMESLOT_NOT_EXIST));
 
@@ -70,6 +74,7 @@ public class TimeSlotService {
         return timeSlotResponse;
     }
 
+    @PreAuthorize("hasRole('MANEGE')")
     public void deleteTimeSlotById(Long id){
         timeSlotRepository.deleteById(id);
     }
