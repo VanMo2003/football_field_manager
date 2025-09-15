@@ -14,6 +14,7 @@ import com.example.football_field_manager.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class FootballFieldService {
     FootballFieldMapper footballFieldMapper;
     UserRepository userRepository;
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public List<FootballFieldResponse> getAllFootballField(){
         List<FootballField> footballFields = footballFieldRepository.findAll();
 
@@ -37,6 +39,7 @@ public class FootballFieldService {
         return footballFieldResponses;
     }
 
+    @PreAuthorize("hasRole('MANEGE')")
     public FootballFieldResponse createFootballField(FootballFieldRequest request){
         Optional<FootballField> footballFieldFind = footballFieldRepository.findByName(request.getName());
 
@@ -56,6 +59,7 @@ public class FootballFieldService {
         return footballFieldResponse;
     }
 
+    @PreAuthorize("hasRole('MANEGE')")
     public FootballFieldResponse updateFootballField(Long id, UpdateFootballFieldRequest request){
         FootballField footballField = footballFieldRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
 
@@ -68,6 +72,7 @@ public class FootballFieldService {
         return footballFieldResponse;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteFootballFieldById(Long id){
         footballFieldRepository.deleteById(id);
     }
