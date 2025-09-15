@@ -27,6 +27,16 @@ public class FootballFieldService {
     FootballFieldMapper footballFieldMapper;
     UserRepository userRepository;
 
+    public List<FootballFieldResponse> getAllFootballField(){
+        List<FootballField> footballFields = footballFieldRepository.findAll();
+
+        List<FootballFieldResponse> footballFieldResponses = footballFields.stream().map(footballField ->
+                footballFieldMapper.toFootballFieldResponse(footballField)
+        ).toList();
+
+        return footballFieldResponses;
+    }
+
     public FootballFieldResponse createFootballField(FootballFieldRequest request){
         Optional<FootballField> footballFieldFind = footballFieldRepository.findByName(request.getName());
 

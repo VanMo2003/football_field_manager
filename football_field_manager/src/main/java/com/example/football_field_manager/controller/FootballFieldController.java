@@ -24,6 +24,15 @@ import java.util.List;
 public class FootballFieldController {
     FootballFieldService footballFieldService;
 
+    @GetMapping
+    ApiResponse<List<FootballFieldResponse>> getAllFootballField(){
+        log.warn("call api [GET] /football-field");
+        ApiResponse<List<FootballFieldResponse>> response = new ApiResponse<>();
+        response.setData(footballFieldService.getAllFootballField());
+        log.info("==> [1000][GET] /football-field");
+        return response;
+    }
+
     @PostMapping
     ApiResponse<FootballFieldResponse> createFootballField(@RequestBody @Valid FootballFieldRequest request){
         log.warn("call api [POST] /football-field");
