@@ -22,16 +22,25 @@ public class TimeSlot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     @NotNull(message = "thời gian bắt đầu ca không được bỏ trống")
     LocalTime startTime;
+
     @NotNull(message = "thời gian kết thúc ca không được bỏ trống")
     LocalTime endTime;
+
     @NotNull(message = "giá ca không được bỏ trống")
     @Column(nullable = false, precision = 15, scale = 2)
     BigDecimal price;
+
+    @ManyToOne
+    @JoinColumn(name = "football_field_id", nullable = false)
+    FootballField footballField;
+
     @CreationTimestamp
     @Column(updatable = false)
     Date onCreate;
+
     @UpdateTimestamp
     Date onUpdate;
 }

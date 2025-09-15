@@ -3,15 +3,20 @@ package com.example.football_field_manager.service;
 
 import com.example.football_field_manager.dto.request.TimeSlotRequest;
 import com.example.football_field_manager.dto.response.TimeSlotResponse;
+import com.example.football_field_manager.entity.FootballField;
 import com.example.football_field_manager.entity.TimeSlot;
 import com.example.football_field_manager.exception.AppException;
 import com.example.football_field_manager.exception.ErrorCode;
 import com.example.football_field_manager.mapper.TimeSlotMapper;
+import com.example.football_field_manager.repository.FootballFieldRepository;
 import com.example.football_field_manager.repository.TimeSlotRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,11 +24,22 @@ import org.springframework.stereotype.Service;
 public class TimeSlotService {
     TimeSlotRepository timeSlotRepository;
     TimeSlotMapper timeSlotMapper;
+    FootballFieldRepository footballFieldRepository;
 
     public TimeSlotResponse createTimeSlot(TimeSlotRequest request){
+        FootballField footballField = footballFieldRepository.findById(request.getFootballFieldId()).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
+
+        Optional<TimeSlot> timeSlotFind = timeSlotRepository.findTimeSlotIntersectStartTimeAndEndTime(
+                request.getStartTime(), request.getEndTime(), request.getFootballFieldId()
+        );
+
+        if (timeSlotFind.isPresent()) throw new AppException(ErrorCode.TIMESLOT_EXISTED);
+
         TimeSlot timeSlot = timeSlotMapper.toTimeSlot(request);
 
+        timeSlot.setFootballField(footballField);
         timeSlotRepository.save(timeSlot);
+
         TimeSlotResponse timeSlotResponse = timeSlotMapper.toTimeSlotResponse(timeSlot);
 
         return timeSlotResponse;

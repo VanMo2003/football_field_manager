@@ -30,18 +30,18 @@ public class TimeSlotController {
     }
     @PutMapping("/{id}")
     ApiResponse<TimeSlotResponse> updateTimeSlot(@PathVariable Long id,@RequestBody @Valid TimeSlotRequest request){
-        log.warn("call api [PUT] /timeslot");
+        log.warn("call api [PUT] /timeslot/{id}");
         ApiResponse<TimeSlotResponse> response = new ApiResponse<>();
         response.setData(timeSlotService.updateTimeSlot(id, request));
-        log.info("==> [1000][PUT] /timeslot");
+        log.info("==> [1000][PUT] /timeslot/{id}");
         return response;
     }
 
     @DeleteMapping("/{id}")
     ApiResponse<String> deleteTimeSlot(@PathVariable Long id){
-        log.warn("call api [DELETE] /timeslot");
+        log.warn("call api [DELETE] /timeslot/{id}");
         timeSlotService.deleteTimeSlotById(id);
-        log.info("==> [1000][DELETE] /timeslot");
+        log.info("==> [1000][DELETE] /timeslot/{id}");
         return ApiResponse.<String>builder()
                 .data("Timeslot has been deleted")
                 .build();

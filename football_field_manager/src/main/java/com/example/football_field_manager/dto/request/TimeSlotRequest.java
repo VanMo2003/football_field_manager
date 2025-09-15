@@ -19,4 +19,5 @@ public class TimeSlotRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     LocalTime endTime;
     BigDecimal price;
+    Long footballFieldId;
 }
