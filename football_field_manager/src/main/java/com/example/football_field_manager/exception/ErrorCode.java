@@ -13,7 +13,7 @@ public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
     CANNOT_CONNECT_TO_SERVER(1001,"can not connect to server", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_TOKEN(1002,"Invalid token", HttpStatus.BAD_REQUEST),
-    ACCESS_DENIED(1003,"access denied", HttpStatus.UNAUTHORIZED),
+    ACCESS_DENIED(1003,"Access denied", HttpStatus.UNAUTHORIZED),
     USER_NOT_EXIST(1004, "User not exist", HttpStatus.NOT_FOUND),
     USER_EXISTED(1005, "User existed", HttpStatus.CONFLICT),
     INCORRECT_ACCOUNT_OR_PASSWORD(1006, "Incorrect account or password", HttpStatus.BAD_REQUEST),

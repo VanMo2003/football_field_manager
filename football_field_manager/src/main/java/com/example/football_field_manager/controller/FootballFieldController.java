@@ -35,10 +35,20 @@ public class FootballFieldController {
 
     @PutMapping("/{id}")
     ApiResponse<FootballFieldResponse> updateFootballField(@PathVariable Long id, @RequestBody @Valid UpdateFootballFieldRequest request){
-        log.warn("call api [PUT] /football-field");
+        log.warn("call api [PUT] /football-field/{id}");
         ApiResponse<FootballFieldResponse> response = new ApiResponse<>();
         response.setData(footballFieldService.updateFootballField(id, request));
-        log.info("==> [1000][PUT] /football-field");
+        log.info("==> [1000][PUT] /football-field/{id}");
         return response;
+    }
+
+    @DeleteMapping("/{id}")
+    ApiResponse<String> deleteFootballField(@PathVariable Long id){
+        log.warn("call api [DELETE] /football-field/{id}");
+        footballFieldService.deleteFootballFieldById(id);
+        log.info("==> [1000][DELETE] /football-field/{id}");
+        return ApiResponse.<String>builder()
+                .data("Football field has been deleted")
+                .build();
     }
 }

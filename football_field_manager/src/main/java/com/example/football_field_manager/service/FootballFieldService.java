@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,7 +26,6 @@ public class FootballFieldService {
     FootballFieldRepository footballFieldRepository;
     FootballFieldMapper footballFieldMapper;
     UserRepository userRepository;
-    UserMapper userMapper;
 
     public FootballFieldResponse createFootballField(FootballFieldRequest request){
         Optional<FootballField> footballFieldFind = footballFieldRepository.findByName(request.getName());
@@ -56,5 +56,9 @@ public class FootballFieldService {
         FootballFieldResponse footballFieldResponse = footballFieldMapper.toFootballFieldResponse(footballField);
 
         return footballFieldResponse;
+    }
+
+    public void deleteFootballFieldById(Long id){
+        footballFieldRepository.deleteById(id);
     }
 }
