@@ -22,6 +22,8 @@ public enum ErrorCode {
     FOOTBALL_FIELD_NOT_EXIST(1009, "Football field not exist", HttpStatus.NOT_FOUND),
     FOOTBALL_FIELD_EXISTED(1010, "Football field name existed", HttpStatus.CONFLICT),
     USER_OF_FOOTBALL_FIELD_EXISTED(1010, "User already owns another football field", HttpStatus.CONFLICT),
+    TIMESLOT_NOT_EXIST(1011, "timeslot not exist", HttpStatus.NOT_FOUND),
+    TIMESLOT_EXISTED(1012, "timeslot existed", HttpStatus.CONFLICT)
     ;
 
     private final int code;
