@@ -13,14 +13,17 @@ public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
     CANNOT_CONNECT_TO_SERVER(1001,"can not connect to server", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_TOKEN(1002,"Invalid token", HttpStatus.BAD_REQUEST),
-    ACCESS_DENIED(1003,"access denied", HttpStatus.UNAUTHORIZED),
+    ACCESS_DENIED(1003,"Access denied", HttpStatus.UNAUTHORIZED),
     USER_NOT_EXIST(1004, "User not exist", HttpStatus.NOT_FOUND),
     USER_EXISTED(1005, "User existed", HttpStatus.CONFLICT),
     INCORRECT_ACCOUNT_OR_PASSWORD(1006, "Incorrect account or password", HttpStatus.BAD_REQUEST),
     ROLE_NOT_EXIST(1007, "Role not exist", HttpStatus.NOT_FOUND),
     ROLE_EXISTED(1008, "Role existed", HttpStatus.CONFLICT),
-    TIMESLOT_NOT_EXIST(1007, "timeslot not exist", HttpStatus.NOT_FOUND),
-    TIMESLOT_EXISTED(1008, "timeslot existed", HttpStatus.CONFLICT)
+    FOOTBALL_FIELD_NOT_EXIST(1009, "Football field not exist", HttpStatus.NOT_FOUND),
+    FOOTBALL_FIELD_EXISTED(1010, "Football field name existed", HttpStatus.CONFLICT),
+    USER_OF_FOOTBALL_FIELD_EXISTED(1010, "User already owns another football field", HttpStatus.CONFLICT),
+    TIMESLOT_NOT_EXIST(1011, "timeslot not exist", HttpStatus.NOT_FOUND),
+    TIMESLOT_EXISTED(1012, "timeslot existed", HttpStatus.CONFLICT)
     ;
 
     private final int code;
