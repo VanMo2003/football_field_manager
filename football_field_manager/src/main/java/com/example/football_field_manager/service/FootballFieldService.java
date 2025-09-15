@@ -1,6 +1,7 @@
 package com.example.football_field_manager.service;
 
 import com.example.football_field_manager.dto.request.FootballFieldRequest;
+import com.example.football_field_manager.dto.request.UpdateFootballFieldRequest;
 import com.example.football_field_manager.dto.response.FootballFieldResponse;
 import com.example.football_field_manager.entity.FootballField;
 import com.example.football_field_manager.entity.User;
@@ -41,7 +42,18 @@ public class FootballFieldService {
         footballFieldRepository.save(footballField);
 
         FootballFieldResponse footballFieldResponse = footballFieldMapper.toFootballFieldResponse(footballField);
-        footballFieldResponse.setUser(userMapper.toUserResponse(user));
+
+        return footballFieldResponse;
+    }
+
+    public FootballFieldResponse updateFootballField(Long id, UpdateFootballFieldRequest request){
+        FootballField footballField = footballFieldRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
+
+        footballFieldMapper.updateFootballField(footballField, request);
+
+        footballFieldRepository.save(footballField);
+
+        FootballFieldResponse footballFieldResponse = footballFieldMapper.toFootballFieldResponse(footballField);
 
         return footballFieldResponse;
     }

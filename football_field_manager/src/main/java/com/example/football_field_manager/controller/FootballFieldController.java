@@ -2,6 +2,7 @@ package com.example.football_field_manager.controller;
 
 
 import com.example.football_field_manager.dto.request.FootballFieldRequest;
+import com.example.football_field_manager.dto.request.UpdateFootballFieldRequest;
 import com.example.football_field_manager.dto.response.ApiResponse;
 import com.example.football_field_manager.dto.response.FootballFieldResponse;
 import com.example.football_field_manager.dto.response.RoleResponse;
@@ -11,10 +12,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,6 +30,15 @@ public class FootballFieldController {
         ApiResponse<FootballFieldResponse> response = new ApiResponse<>();
         response.setData(footballFieldService.createFootballField(request));
         log.info("==> [1000][POST] /football-field");
+        return response;
+    }
+
+    @PutMapping("/{id}")
+    ApiResponse<FootballFieldResponse> updateFootballField(@PathVariable Long id, @RequestBody @Valid UpdateFootballFieldRequest request){
+        log.warn("call api [PUT] /football-field");
+        ApiResponse<FootballFieldResponse> response = new ApiResponse<>();
+        response.setData(footballFieldService.updateFootballField(id, request));
+        log.info("==> [1000][PUT] /football-field");
         return response;
     }
 }

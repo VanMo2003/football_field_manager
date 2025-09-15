@@ -1,7 +1,5 @@
-package com.example.football_field_manager.dto.response;
+package com.example.football_field_manager.dto.request;
 
-
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,13 +10,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class FootballFieldResponse {
-    Long id;
+public class UpdateFootballFieldRequest {
     String name;
     String description;
     String location;
     BigDecimal price;
     Integer totalPitches;
-    boolean active = true;
 }
