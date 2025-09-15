@@ -12,6 +12,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/timeslot")
 @RequiredArgsConstructor
@@ -19,6 +21,14 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class TimeSlotController {
     TimeSlotService timeSlotService;
+    @GetMapping
+    ApiResponse<List<TimeSlotResponse>> getAllTimeSlotByFootballField(@RequestParam("football_field_id") Long footballFieldId){
+        log.warn("call api [GET] /timeslot?football_field_id=id");
+        ApiResponse<List<TimeSlotResponse>> response = new ApiResponse<>();
+        response.setData(timeSlotService.getAllTimeSlotByFootballField(footballFieldId));
+        log.info("==> [1000][GET] /timeslot?football_field_id=id");
+        return response;
+    }
 
     @PostMapping
     ApiResponse<TimeSlotResponse> createTimeSlot(@RequestBody @Valid TimeSlotRequest request){

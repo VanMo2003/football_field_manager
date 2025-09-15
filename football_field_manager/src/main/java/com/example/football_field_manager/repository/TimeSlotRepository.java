@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @Repository
 public interface TimeSlotRepository extends JpaRepository<TimeSlot, Long> {
+	List<TimeSlot> findAllByFootballField(FootballField footballField);
     @Query(
             nativeQuery = true,
             value =

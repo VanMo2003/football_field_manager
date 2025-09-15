@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +27,18 @@ public class TimeSlotService {
     TimeSlotRepository timeSlotRepository;
     TimeSlotMapper timeSlotMapper;
     FootballFieldRepository footballFieldRepository;
+
+    public List<TimeSlotResponse> getAllTimeSlotByFootballField(Long footballFieldId){
+        FootballField footballField = footballFieldRepository.findById(footballFieldId).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
+
+        List<TimeSlotResponse> timeSlotResponses = new ArrayList<>();
+        timeSlotRepository.findAllByFootballField(footballField).stream().map(timeSlot ->
+                timeSlotResponses.add(timeSlotMapper.toTimeSlotResponse(timeSlot))
+        ).toList();
+
+        timeSlotResponses.sort(Comparator.comparing(TimeSlotResponse::getStartTime));
+        return timeSlotResponses;
+    }
 
     public TimeSlotResponse createTimeSlot(TimeSlotRequest request){
         FootballField footballField = footballFieldRepository.findById(request.getFootballFieldId()).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
