@@ -16,4 +16,5 @@ public class ServiceRequest {
     BigDecimal price;
     int quantity = 1;
     boolean status = true;
+    Long footballFieldId;
 }

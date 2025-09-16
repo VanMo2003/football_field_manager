@@ -30,6 +30,9 @@ public class Service {
     @Column(nullable = false, precision = 15, scale = 2)
     BigDecimal price;
     int quantity;
+    @ManyToOne
+    @JoinColumn(name = "football_field_id", nullable = false)
+    FootballField footballField;
     boolean status;
     @CreationTimestamp
     @Column(updatable = false)
