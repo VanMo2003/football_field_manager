@@ -14,8 +14,10 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.attribute.UserPrincipal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -62,7 +64,7 @@ public class TimeSlotService {
         return timeSlotResponse;
     }
 
-    @PreAuthorize("hasRole('MANEGE')")
+    @PreAuthorize("@TimeSlotSecurity.isOwner(#id, authentication.name)")
     public TimeSlotResponse updateTimeSlot(Long id, TimeSlotRequest request){
         TimeSlot timeSlot = timeSlotRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TIMESLOT_NOT_EXIST));
 
