@@ -1,12 +1,15 @@
 package com.example.football_field_manager.repository;
 
 
+import com.example.football_field_manager.entity.FootballField;
 import com.example.football_field_manager.entity.Service;
+import com.example.football_field_manager.entity.TimeSlot;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -24,4 +27,5 @@ public interface ServiceRepository extends JpaRepository<Service, Long> {
             @Param("name") String name,
             @Param("footballFieldId") Long footballFieldId
     );
+	List<Service> findAllByFootballField(FootballField footballField);
 }

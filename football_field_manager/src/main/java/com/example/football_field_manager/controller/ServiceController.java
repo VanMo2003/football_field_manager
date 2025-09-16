@@ -1,10 +1,8 @@
 package com.example.football_field_manager.controller;
 
 
-import com.example.football_field_manager.dto.request.RoleRequest;
 import com.example.football_field_manager.dto.request.ServiceRequest;
 import com.example.football_field_manager.dto.response.ApiResponse;
-import com.example.football_field_manager.dto.response.RoleResponse;
 import com.example.football_field_manager.dto.response.ServiceResponse;
 import com.example.football_field_manager.service.ServiceService;
 import jakarta.validation.Valid;
@@ -14,6 +12,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/service")
 @RequiredArgsConstructor
@@ -21,7 +21,14 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class ServiceController {
     ServiceService serviceService;
-
+    @GetMapping
+    ApiResponse<List<ServiceResponse>> getAllServiceByFootballField(@RequestParam("football_field_id") Long footballFieldId) {
+        log.warn("call api [GET] /service?football_field_id=footballFieldId");
+        ApiResponse<List<ServiceResponse>> response = new ApiResponse<>();
+        response.setData(serviceService.getAllServiceByFootballField(footballFieldId));
+        log.info("==> [1000][GET] /service?football_field_id=footballFieldId");
+        return response;
+    }
     @PostMapping
     ApiResponse<ServiceResponse> createService(@RequestBody @Valid ServiceRequest request) {
         log.warn("call api [POST] /service");
