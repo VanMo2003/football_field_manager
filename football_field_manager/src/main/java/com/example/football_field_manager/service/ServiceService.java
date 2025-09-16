@@ -13,6 +13,7 @@ import com.example.football_field_manager.repository.ServiceRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -26,6 +27,7 @@ public class ServiceService {
     ServiceRepository serviceRepository;
     ServiceMapper serviceMapper;
     FootballFieldRepository footballFieldRepository;
+    @PreAuthorize("hasRole('MANEGE')")
     public List<ServiceResponse> getAllServiceByFootballField(Long footballFieldId){
         FootballField footballField = footballFieldRepository.findById(footballFieldId).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
 
@@ -35,7 +37,7 @@ public class ServiceService {
 
         return serviceResponses;
     }
-
+    @PreAuthorize("hasRole('MANEGE')")
     public ServiceResponse createService(ServiceRequest request){
         FootballField footballField = footballFieldRepository.findById(request.getFootballFieldId()).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
 
@@ -51,7 +53,7 @@ public class ServiceService {
 
         return serviceResponse;
     }
-
+    @PreAuthorize("hasRole('MANEGE')")
     public ServiceResponse updateService(Long id, ServiceRequest request){
         Service service = serviceRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SERVICE_NOT_EXIST));
 
@@ -62,7 +64,7 @@ public class ServiceService {
 
         return serviceResponse;
     }
-
+    @PreAuthorize("hasRole('MANEGE')")
     public void deleteService(Long id){
         serviceRepository.deleteById(id);
     }
