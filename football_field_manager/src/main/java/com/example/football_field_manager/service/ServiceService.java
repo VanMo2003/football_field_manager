@@ -53,7 +53,7 @@ public class ServiceService {
 
         return serviceResponse;
     }
-    @PreAuthorize("hasRole('MANEGE')")
+    @PreAuthorize("@ServiceSecurity.isOwner(#id, authentication.name)")
     public ServiceResponse updateService(Long id, ServiceRequest request){
         Service service = serviceRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SERVICE_NOT_EXIST));
 
