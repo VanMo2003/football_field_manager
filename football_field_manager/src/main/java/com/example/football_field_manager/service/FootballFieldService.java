@@ -59,7 +59,7 @@ public class FootballFieldService {
         return footballFieldResponse;
     }
 
-    @PreAuthorize("hasRole('MANEGE')")
+    @PreAuthorize("@FootballFieldSecurity.isOwner(#id, authentication.name)")
     public FootballFieldResponse updateFootballField(Long id, UpdateFootballFieldRequest request){
         FootballField footballField = footballFieldRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
 
