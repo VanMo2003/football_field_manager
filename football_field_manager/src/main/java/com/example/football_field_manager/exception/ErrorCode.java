@@ -22,10 +22,11 @@ public enum ErrorCode {
     FOOTBALL_FIELD_NOT_EXIST(1009, "Football field not exist", HttpStatus.NOT_FOUND),
     FOOTBALL_FIELD_EXISTED(1010, "Football field name existed", HttpStatus.CONFLICT),
     USER_OF_FOOTBALL_FIELD_EXISTED(1010, "User already owns another football field", HttpStatus.CONFLICT),
-    TIMESLOT_NOT_EXIST(1011, "timeslot not exist", HttpStatus.NOT_FOUND),
-    TIMESLOT_EXISTED(1012, "timeslot existed", HttpStatus.CONFLICT),
+    TIMESLOT_NOT_EXIST(1011, "Timeslot not exist", HttpStatus.NOT_FOUND),
+    TIMESLOT_EXISTED(1012, "Timeslot existed", HttpStatus.CONFLICT),
     SERVICE_NOT_EXIST(1013, "Service not exist", HttpStatus.NOT_FOUND),
-    SERVICE_EXISTED(1014, "Service existed", HttpStatus.CONFLICT)
+    SERVICE_EXISTED(1014, "Service existed", HttpStatus.CONFLICT),
+    BOOKING_EXISTED(1014, "This field's time slot has been booked", HttpStatus.CONFLICT)
     ;
 
     private final int code;
