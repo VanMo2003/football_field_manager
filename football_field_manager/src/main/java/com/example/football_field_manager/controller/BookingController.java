@@ -5,13 +5,17 @@ import com.example.football_field_manager.dto.request.BookingUpdateRequest;
 import com.example.football_field_manager.dto.response.ApiResponse;
 import com.example.football_field_manager.dto.response.BookingResponse;
 import com.example.football_field_manager.service.BookingService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.HttpURLConnection;
 import java.util.List;
 
 @RestController
@@ -23,19 +27,19 @@ public class BookingController {
     BookingService bookingService;
     @GetMapping("/getAllByUser/{userPhoneNumber}")
     ApiResponse<List<BookingResponse>> getAllBookingByUser(@PathVariable String userPhoneNumber){
-        log.warn("call api [POST] /booking/getAllByUser/{userPhoneNumber}");
+        log.warn("call api [GET] /booking/getAllByUser/{userPhoneNumber}");
         ApiResponse<List<BookingResponse>> response = new ApiResponse<>();
         response.setData(bookingService.getAllBookingByUser(userPhoneNumber));
-        log.info("==> [1000][POST] /booking/getAllByUser/{userPhoneNumber}");
+        log.info("==> [1000][GET] /booking/getAllByUser/{userPhoneNumber}");
         return response;
     }
 
     @GetMapping("/getAllByFootballField/{userPhoneNumber}")
     ApiResponse<List<BookingResponse>> getAllBookingByFootballField(@PathVariable Long userPhoneNumber){
-        log.warn("call api [POST] /booking/getAllByFootballField/{userPhoneNumber}");
+        log.warn("call api [GET] /booking/getAllByFootballField/{userPhoneNumber}");
         ApiResponse<List<BookingResponse>> response = new ApiResponse<>();
         response.setData(bookingService.getAllBookingByFootballField(userPhoneNumber));
-        log.info("==> [1000][POST] /booking/getAllByFootballField/{userPhoneNumber}");
+        log.info("==> [1000][GET] /booking/getAllByFootballField/{userPhoneNumber}");
         return response;
     }
 
@@ -59,10 +63,19 @@ public class BookingController {
 
     @PutMapping("/confirmBooking/{bookingId}")
     ApiResponse<BookingResponse> confirmBooking(@PathVariable Long bookingId){
-        log.warn("call api [POST] /booking/confirmBooking/{bookingId}");
+        log.warn("call api [PUT] /booking/confirmBooking/{bookingId}");
         ApiResponse<BookingResponse> response = new ApiResponse<>();
         response.setData(bookingService.confirmBooking(bookingId));
-        log.info("==> [1000][POST] /booking/confirmBooking/{bookingId}");
+        log.info("==> [1000][PUT] /booking/confirmBooking/{bookingId}");
+        return response;
+    }
+
+    @PutMapping("/completeBooking/{bookingId}")
+    ApiResponse<BookingResponse> completeBooking(@PathVariable Long bookingId){
+        log.warn("call api [PUT] /booking/completeBooking/{bookingId}");
+        ApiResponse<BookingResponse> response = new ApiResponse<>();
+        response.setData(bookingService.completeBooking(bookingId));
+        log.info("==> [1000][PUT] /booking/completeBooking/{bookingId}");
         return response;
     }
 }

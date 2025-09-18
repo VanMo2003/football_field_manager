@@ -127,4 +127,16 @@ public class BookingService {
 
         return bookingResponse;
     }
+
+    public BookingResponse completeBooking(Long bookingId){
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXISTED));
+
+        booking.setBookingStatus(BookingStatus.completed);
+
+        BookingResponse bookingResponse = bookingMapper.toBookingResponse(booking);
+
+        bookingRepository.save(booking);
+
+        return bookingResponse;
+    }
 }
