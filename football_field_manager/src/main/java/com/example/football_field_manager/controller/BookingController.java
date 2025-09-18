@@ -1,6 +1,7 @@
 package com.example.football_field_manager.controller;
 
 import com.example.football_field_manager.dto.request.BookingRequest;
+import com.example.football_field_manager.dto.request.BookingUpdateRequest;
 import com.example.football_field_manager.dto.response.ApiResponse;
 import com.example.football_field_manager.dto.response.BookingResponse;
 import com.example.football_field_manager.service.BookingService;
@@ -9,10 +10,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/booking")
@@ -28,6 +26,15 @@ public class BookingController {
         ApiResponse<BookingResponse> response = new ApiResponse<>();
         response.setData(bookingService.createBooking(request));
         log.info("==> [1000][POST] /booking");
+        return response;
+    }
+
+    @PutMapping("/{bookingId}")
+    ApiResponse<BookingResponse> updateBooking(@PathVariable Long bookingId, @RequestBody @Valid BookingUpdateRequest request){
+        log.warn("call api [PUT] /booking/{bookingId}");
+        ApiResponse<BookingResponse> response = new ApiResponse<>();
+        response.setData(bookingService.updateBooking(bookingId, request));
+        log.info("==> [1000][PUT] /booking/{bookingId}");
         return response;
     }
 }

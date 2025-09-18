@@ -1,6 +1,7 @@
 package com.example.football_field_manager.service;
 
 import com.example.football_field_manager.dto.request.BookingRequest;
+import com.example.football_field_manager.dto.request.BookingUpdateRequest;
 import com.example.football_field_manager.dto.response.BookingResponse;
 import com.example.football_field_manager.entity.Booking;
 import com.example.football_field_manager.entity.FootballField;
@@ -13,10 +14,12 @@ import com.example.football_field_manager.repository.BookingRepository;
 import com.example.football_field_manager.repository.FootballFieldRepository;
 import com.example.football_field_manager.repository.ServiceRepository;
 import com.example.football_field_manager.repository.TimeSlotRepository;
+import com.example.football_field_manager.utils.CompareListUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 
@@ -49,6 +52,38 @@ public class BookingService {
             booking.setServices(new HashSet<>());
             request.getServiceIds().forEach(serviceId -> {
                 Service service = serviceRepository.findById(serviceId).orElseThrow(() -> new AppException(ErrorCode.SERVICE_NOT_EXIST));
+                booking.getServices().add(service);
+            });
+        }
+
+        BookingResponse bookingResponse = bookingMapper.toBookingResponse(booking);
+
+        bookingRepository.save(booking);
+
+        return bookingResponse;
+    }
+
+    public  BookingResponse updateBooking(Long bookingId, BookingUpdateRequest request){
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXISTED));
+
+        if (request.getPitchNumber() != booking.getPitchNumber()){
+            FootballField footballField = booking.getFootballField();
+
+            if (request.getPitchNumber() > footballField.getTotalPitches()) throw new AppException(ErrorCode.PITCH_NUMBER_EXCEEDS_LIMIT);
+
+            TimeSlot timeSlot = booking.getTimeSlot();
+
+            Optional<Booking> bookingFind = bookingRepository.findBookingByFootballFieldAndTimeSlotAndPitchNumber(footballField, timeSlot, request.getPitchNumber());
+
+            if (bookingFind.isPresent()) throw new AppException(ErrorCode.BOOKING_EXISTED);
+        }
+
+        bookingMapper.updateBooking(booking, request);
+        if (!CompareListUtil.compare(booking.getServices().stream().map(service -> service.getId()).toList(), request.getServiceIds().stream().toList())){
+            booking.getServices().clear();
+
+            request.getServiceIds().forEach(serviceId -> {
+                Service service = serviceRepository.findById(serviceId).orElseThrow(() -> {throw new AppException(ErrorCode.SERVICE_NOT_EXIST);});
                 booking.getServices().add(service);
             });
         }
