@@ -119,6 +119,8 @@ public class BookingService {
     public BookingResponse confirmBooking(Long bookingId){
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXISTED));
 
+        if (!booking.getBookingStatus().equals(BookingStatus.pending)) throw new AppException(ErrorCode.NOT_IN_PENDING_STATUS);
+
         booking.setBookingStatus(BookingStatus.confirmed);
 
         BookingResponse bookingResponse = bookingMapper.toBookingResponse(booking);
@@ -132,6 +134,20 @@ public class BookingService {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXISTED));
 
         booking.setBookingStatus(BookingStatus.completed);
+
+        BookingResponse bookingResponse = bookingMapper.toBookingResponse(booking);
+
+        bookingRepository.save(booking);
+
+        return bookingResponse;
+    }
+
+    public BookingResponse cancelBooking(Long bookingId){
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXISTED));
+
+        if (booking.getBookingStatus().equals(BookingStatus.completed)) throw new AppException(ErrorCode.BOOKING_COMPLETED);
+
+        booking.setBookingStatus(BookingStatus.cancelled);
 
         BookingResponse bookingResponse = bookingMapper.toBookingResponse(booking);
 

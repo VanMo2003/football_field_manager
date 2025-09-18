@@ -78,4 +78,13 @@ public class BookingController {
         log.info("==> [1000][PUT] /booking/completeBooking/{bookingId}");
         return response;
     }
+
+    @PutMapping("/cancelBooking/{bookingId}")
+    ApiResponse<BookingResponse> cancelBooking(@PathVariable Long bookingId){
+        log.warn("call api [PUT] /booking/cancelBooking/{bookingId}");
+        ApiResponse<BookingResponse> response = new ApiResponse<>();
+        response.setData(bookingService.cancelBooking(bookingId));
+        log.info("==> [1000][PUT] /booking/cancelBooking/{bookingId}");
+        return response;
+    }
 }

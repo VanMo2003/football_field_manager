@@ -29,6 +29,8 @@ public enum ErrorCode {
     BOOKING_NOT_EXISTED(1015, "Booking not existed", HttpStatus.NOT_FOUND),
     TIME_SLOT_HAS_BEEN_BOOKED(1016, "This field's time slot has been booked", HttpStatus.CONFLICT),
     PITCH_NUMBER_EXCEEDS_LIMIT(1017, "Pitch number exceeds limit", HttpStatus.BAD_REQUEST),
+    BOOKING_COMPLETED(1018, "Cannot be cancelled once booking has been completed", HttpStatus.BAD_REQUEST),
+    NOT_IN_PENDING_STATUS(1019, "Cannot confirm when booking is not in pending status", HttpStatus.BAD_REQUEST),
     ;
 
     private final int code;
