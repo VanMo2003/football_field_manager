@@ -12,6 +12,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/booking")
 @RequiredArgsConstructor
@@ -19,6 +21,14 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class BookingController {
     BookingService bookingService;
+    @GetMapping("/getAllByUser/{userPhoneNumber}")
+    ApiResponse<List<BookingResponse>> getAllBookingByUser(@PathVariable String userPhoneNumber){
+        log.warn("call api [POST] /booking/getAllByUser/{userPhoneNumber}");
+        ApiResponse<List<BookingResponse>> response = new ApiResponse<>();
+        response.setData(bookingService.getAllBookingByUser(userPhoneNumber));
+        log.info("==> [1000][POST] /booking/getAllByUser/{userPhoneNumber}");
+        return response;
+    }
 
     @PostMapping
     ApiResponse<BookingResponse> createBooking(@RequestBody @Valid BookingRequest request){

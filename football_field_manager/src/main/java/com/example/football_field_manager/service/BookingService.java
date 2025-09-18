@@ -3,6 +3,7 @@ package com.example.football_field_manager.service;
 import com.example.football_field_manager.dto.request.BookingRequest;
 import com.example.football_field_manager.dto.request.BookingUpdateRequest;
 import com.example.football_field_manager.dto.response.BookingResponse;
+import com.example.football_field_manager.dto.response.TimeSlotResponse;
 import com.example.football_field_manager.entity.Booking;
 import com.example.football_field_manager.entity.FootballField;
 import com.example.football_field_manager.entity.Service;
@@ -19,9 +20,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
@@ -32,6 +31,16 @@ public class BookingService {
     FootballFieldRepository footballFieldRepository;
     TimeSlotRepository timeSlotRepository;
     ServiceRepository serviceRepository;
+
+    public List<BookingResponse> getAllBookingByUser(String userPhoneNumber){
+        List<BookingResponse> bookingResponses = new ArrayList<>();
+
+        bookingRepository.findBookingByUserPhoneNumber(userPhoneNumber).stream().map(booking ->
+            bookingResponses.add(bookingMapper.toBookingResponse(booking))
+        ).toList();
+
+        return bookingResponses;
+    }
 
     public BookingResponse createBooking(BookingRequest request){
         FootballField footballField = footballFieldRepository.findById(request.getFootballFieldId()).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
@@ -94,4 +103,6 @@ public class BookingService {
 
         return bookingResponse;
     }
+
+
 }
