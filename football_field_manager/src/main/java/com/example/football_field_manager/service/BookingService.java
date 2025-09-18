@@ -32,9 +32,12 @@ public class BookingService {
 
     public BookingResponse createBooking(BookingRequest request){
         FootballField footballField = footballFieldRepository.findById(request.getFootballFieldId()).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
+
+        if (request.getPitchNumber() > footballField.getTotalPitches()) throw new AppException(ErrorCode.PITCH_NUMBER_EXCEEDS_LIMIT);
+
         TimeSlot timeSlot = timeSlotRepository.findById(request.getTimeSlotId()).orElseThrow(() -> new AppException(ErrorCode.TIMESLOT_NOT_EXIST));
 
-        Optional<Booking> bookingFind = bookingRepository.findBookingByFootballFieldAndTimeSlot(footballField, timeSlot);
+        Optional<Booking> bookingFind = bookingRepository.findBookingByFootballFieldAndTimeSlotAndPitchNumber(footballField, timeSlot, request.getPitchNumber());
 
         if (bookingFind.isPresent()) throw new AppException(ErrorCode.BOOKING_EXISTED);
 
@@ -51,7 +54,6 @@ public class BookingService {
         }
 
         BookingResponse bookingResponse = bookingMapper.toBookingResponse(booking);
-
 
         bookingRepository.save(booking);
 

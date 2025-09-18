@@ -26,7 +26,9 @@ public enum ErrorCode {
     TIMESLOT_EXISTED(1012, "Timeslot existed", HttpStatus.CONFLICT),
     SERVICE_NOT_EXIST(1013, "Service not exist", HttpStatus.NOT_FOUND),
     SERVICE_EXISTED(1014, "Service existed", HttpStatus.CONFLICT),
-    BOOKING_EXISTED(1014, "This field's time slot has been booked", HttpStatus.CONFLICT)
+    BOOKING_NOT_EXISTED(1015, "This field's time slot has been booked", HttpStatus.CONFLICT),
+    BOOKING_EXISTED(1016, "This field's time slot has been booked", HttpStatus.CONFLICT),
+    PITCH_NUMBER_EXCEEDS_LIMIT(1016, "Pitch number exceeds limit", HttpStatus.BAD_REQUEST)
     ;
 
     private final int code;

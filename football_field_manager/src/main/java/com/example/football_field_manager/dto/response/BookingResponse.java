@@ -26,6 +26,8 @@ public class BookingResponse {
 
     String userPhoneNumber;
 
+    Integer pitchNumber;
+
     FootballFieldResponse footballField;
 
     TimeSlotBookingResponse timeSlot;

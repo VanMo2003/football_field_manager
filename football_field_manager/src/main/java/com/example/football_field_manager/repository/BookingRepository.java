@@ -12,5 +12,5 @@ import java.util.Optional;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    Optional<Booking> findBookingByFootballFieldAndTimeSlot(FootballField footballField, TimeSlot timeSlot);
+    Optional<Booking> findBookingByFootballFieldAndTimeSlotAndPitchNumber(FootballField footballField, TimeSlot timeSlot, Integer pitchNumber);
 }

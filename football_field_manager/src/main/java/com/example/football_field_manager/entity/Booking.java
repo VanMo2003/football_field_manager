@@ -38,6 +38,10 @@ public class Booking {
     @NotNull
     String userPhoneNumber;
 
+    @NotNull(message = "số sân không được để trống")
+    @Column(nullable = false)
+    private Integer pitchNumber;
+
     @ManyToOne
     @JoinColumn(name = "football_field_id", nullable = false)
     FootballField footballField;

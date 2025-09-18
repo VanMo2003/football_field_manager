@@ -22,6 +22,8 @@ public class BookingRequest {
 
     String userPhoneNumber;
 
+    Integer pitchNumber;
+
     Long footballFieldId;
 
     Long timeSlotId;
