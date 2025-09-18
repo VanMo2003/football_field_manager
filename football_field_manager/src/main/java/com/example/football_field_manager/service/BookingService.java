@@ -42,6 +42,18 @@ public class BookingService {
         return bookingResponses;
     }
 
+    public List<BookingResponse> getAllBookingByFootballField(Long footballFieldId){
+        FootballField footballField = footballFieldRepository.findById(footballFieldId).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
+
+        List<BookingResponse> bookingResponses = new ArrayList<>();
+
+        bookingRepository.findBookingByFootballField(footballField).stream().map(booking ->
+                bookingResponses.add(bookingMapper.toBookingResponse(booking))
+        ).toList();
+
+        return bookingResponses;
+    }
+
     public BookingResponse createBooking(BookingRequest request){
         FootballField footballField = footballFieldRepository.findById(request.getFootballFieldId()).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
 

@@ -30,6 +30,15 @@ public class BookingController {
         return response;
     }
 
+    @GetMapping("/getAllByFootballField/{userPhoneNumber}")
+    ApiResponse<List<BookingResponse>> getAllBookingByFootballField(@PathVariable Long userPhoneNumber){
+        log.warn("call api [POST] /booking/getAllByFootballField/{userPhoneNumber}");
+        ApiResponse<List<BookingResponse>> response = new ApiResponse<>();
+        response.setData(bookingService.getAllBookingByFootballField(userPhoneNumber));
+        log.info("==> [1000][POST] /booking/getAllByFootballField/{userPhoneNumber}");
+        return response;
+    }
+
     @PostMapping
     ApiResponse<BookingResponse> createBooking(@RequestBody @Valid BookingRequest request){
         log.warn("call api [POST] /booking");
