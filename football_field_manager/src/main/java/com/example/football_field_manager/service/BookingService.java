@@ -1,9 +1,9 @@
 package com.example.football_field_manager.service;
 
+import com.example.football_field_manager.constant.BookingStatus;
 import com.example.football_field_manager.dto.request.BookingRequest;
 import com.example.football_field_manager.dto.request.BookingUpdateRequest;
 import com.example.football_field_manager.dto.response.BookingResponse;
-import com.example.football_field_manager.dto.response.TimeSlotResponse;
 import com.example.football_field_manager.entity.Booking;
 import com.example.football_field_manager.entity.FootballField;
 import com.example.football_field_manager.entity.Service;
@@ -63,7 +63,7 @@ public class BookingService {
 
         Optional<Booking> bookingFind = bookingRepository.findBookingByFootballFieldAndTimeSlotAndPitchNumber(footballField, timeSlot, request.getPitchNumber());
 
-        if (bookingFind.isPresent()) throw new AppException(ErrorCode.BOOKING_EXISTED);
+        if (bookingFind.isPresent()) throw new AppException(ErrorCode.TIMESLOT_EXISTED);
 
         Booking booking = bookingMapper.toBooking(request);
 
@@ -96,7 +96,7 @@ public class BookingService {
 
             Optional<Booking> bookingFind = bookingRepository.findBookingByFootballFieldAndTimeSlotAndPitchNumber(footballField, timeSlot, request.getPitchNumber());
 
-            if (bookingFind.isPresent()) throw new AppException(ErrorCode.BOOKING_EXISTED);
+            if (bookingFind.isPresent()) throw new AppException(ErrorCode.TIME_SLOT_HAS_BEEN_BOOKED);
         }
 
         bookingMapper.updateBooking(booking, request);
@@ -116,5 +116,15 @@ public class BookingService {
         return bookingResponse;
     }
 
+    public BookingResponse confirmBooking(Long bookingId){
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXISTED));
 
+        booking.setBookingStatus(BookingStatus.confirmed);
+
+        BookingResponse bookingResponse = bookingMapper.toBookingResponse(booking);
+
+        bookingRepository.save(booking);
+
+        return bookingResponse;
+    }
 }

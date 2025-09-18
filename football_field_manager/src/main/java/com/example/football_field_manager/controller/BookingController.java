@@ -56,4 +56,13 @@ public class BookingController {
         log.info("==> [1000][PUT] /booking/{bookingId}");
         return response;
     }
+
+    @PutMapping("/confirmBooking/{bookingId}")
+    ApiResponse<BookingResponse> confirmBooking(@PathVariable Long bookingId){
+        log.warn("call api [POST] /booking/confirmBooking/{bookingId}");
+        ApiResponse<BookingResponse> response = new ApiResponse<>();
+        response.setData(bookingService.confirmBooking(bookingId));
+        log.info("==> [1000][POST] /booking/confirmBooking/{bookingId}");
+        return response;
+    }
 }
