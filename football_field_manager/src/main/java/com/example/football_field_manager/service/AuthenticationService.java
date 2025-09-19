@@ -1,7 +1,6 @@
 package com.example.football_field_manager.service;
 
 
-import com.example.football_field_manager.constant.PredefinedRole;
 import com.example.football_field_manager.dto.request.AuthenticationRequest;
 import com.example.football_field_manager.dto.request.IntrospectRequest;
 import com.example.football_field_manager.dto.response.AuthenticationResponse;
@@ -30,7 +29,6 @@ import org.springframework.transaction.CannotCreateTransactionException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Objects;
-import java.util.StringJoiner;
 
 
 @Service
