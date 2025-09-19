@@ -19,6 +19,7 @@ import com.example.football_field_manager.utils.CompareListUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.*;
 
@@ -32,6 +33,7 @@ public class BookingService {
     TimeSlotRepository timeSlotRepository;
     ServiceRepository serviceRepository;
 
+    @PreAuthorize("hasRole('USER')")
     public List<BookingResponse> getAllBookingByUser(String userPhoneNumber){
         List<BookingResponse> bookingResponses = new ArrayList<>();
 
@@ -42,6 +44,7 @@ public class BookingService {
         return bookingResponses;
     }
 
+    @PreAuthorize("hasRole('MANEGE')")
     public List<BookingResponse> getAllBookingByFootballField(Long footballFieldId){
         FootballField footballField = footballFieldRepository.findById(footballFieldId).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
 
@@ -54,6 +57,7 @@ public class BookingService {
         return bookingResponses;
     }
 
+    @PreAuthorize("hasAnyRole('MANEGE', 'USER')")
     public BookingResponse createBooking(BookingRequest request){
         FootballField footballField = footballFieldRepository.findById(request.getFootballFieldId()).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
 
@@ -84,6 +88,7 @@ public class BookingService {
         return bookingResponse;
     }
 
+    @PreAuthorize("hasAnyRole('MANEGE', 'USER')")
     public  BookingResponse updateBooking(Long bookingId, BookingUpdateRequest request){
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXISTED));
 
@@ -116,6 +121,8 @@ public class BookingService {
         return bookingResponse;
     }
 
+
+    @PreAuthorize("hasRole('MANEGE')")
     public BookingResponse confirmBooking(Long bookingId){
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXISTED));
 
@@ -130,6 +137,7 @@ public class BookingService {
         return bookingResponse;
     }
 
+    @PreAuthorize("hasRole('MANEGE')")
     public BookingResponse completeBooking(Long bookingId){
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXISTED));
 
@@ -142,6 +150,7 @@ public class BookingService {
         return bookingResponse;
     }
 
+    @PreAuthorize("hasRole('USER')")
     public BookingResponse cancelBooking(Long bookingId){
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXISTED));
 
