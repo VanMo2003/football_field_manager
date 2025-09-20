@@ -27,7 +27,7 @@ public class ServiceService {
     ServiceRepository serviceRepository;
     ServiceMapper serviceMapper;
     FootballFieldRepository footballFieldRepository;
-    @PreAuthorize("hasRole('MANEGE')")
+    @PreAuthorize("hasAnyRole('MANEGE', 'USER')")
     public List<ServiceResponse> getAllServiceByFootballField(Long footballFieldId){
         FootballField footballField = footballFieldRepository.findById(footballFieldId).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
 

@@ -88,16 +88,20 @@ public class BookingService {
         return bookingResponse;
     }
 
-    @PreAuthorize("hasAnyRole('MANEGE', 'USER')")
+    @PreAuthorize("@BookingSecurity.isOwner(#bookingId, authentication.name)")
     public  BookingResponse updateBooking(Long bookingId, BookingUpdateRequest request){
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXISTED));
 
-        if (request.getPitchNumber() != booking.getPitchNumber()){
+        TimeSlot timeSlot = new TimeSlot();
+
+        if (request.getPitchNumber() != booking.getPitchNumber() || request.getTimeSlotId() != booking.getTimeSlot().getId()){
             FootballField footballField = booking.getFootballField();
 
             if (request.getPitchNumber() > footballField.getTotalPitches()) throw new AppException(ErrorCode.PITCH_NUMBER_EXCEEDS_LIMIT);
 
-            TimeSlot timeSlot = booking.getTimeSlot();
+            timeSlot = request.getTimeSlotId() != booking.getTimeSlot().getId()
+                    ? timeSlotRepository.findById(request.getTimeSlotId()).orElseThrow(() -> new AppException(ErrorCode.TIMESLOT_EXISTED))
+                    : booking.getTimeSlot();
 
             Optional<Booking> bookingFind = bookingRepository.findBookingByFootballFieldAndTimeSlotAndPitchNumber(footballField, timeSlot, request.getPitchNumber());
 
@@ -105,6 +109,9 @@ public class BookingService {
         }
 
         bookingMapper.updateBooking(booking, request);
+        
+        if (request.getTimeSlotId() != booking.getTimeSlot().getId()) booking.setTimeSlot(timeSlot);
+
         if (!CompareListUtil.compare(booking.getServices().stream().map(service -> service.getId()).toList(), request.getServiceIds().stream().toList())){
             booking.getServices().clear();
 

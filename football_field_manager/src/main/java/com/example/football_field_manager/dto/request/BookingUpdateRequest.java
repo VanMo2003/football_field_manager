@@ -18,6 +18,8 @@ import java.util.Set;
 public class BookingUpdateRequest {
     String userPhoneNumber;
 
+    Long timeSlotId;
+
     Integer pitchNumber;
 
     Set<Long> serviceIds = new HashSet<>();

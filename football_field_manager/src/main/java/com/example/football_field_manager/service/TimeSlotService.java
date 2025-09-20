@@ -31,7 +31,7 @@ public class TimeSlotService {
     TimeSlotMapper timeSlotMapper;
     FootballFieldRepository footballFieldRepository;
 
-    @PreAuthorize("hasRole('MANEGE')")
+    @PreAuthorize("hasAnyRole('MANEGE', 'USER')")
     public List<TimeSlotResponse> getAllTimeSlotByFootballField(Long footballFieldId){
         FootballField footballField = footballFieldRepository.findById(footballFieldId).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
 
