@@ -24,4 +24,10 @@ public class BookingSecurity {
 
         return userLogin.getPhoneNumber().equals(booking.getUserPhoneNumber());
     }
+
+    public boolean isFootballFieldOwner(Long bookingId, String username){
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXISTED));
+
+        return booking.getFootballField().getUser().getUsername().equals(username);
+    }
 }

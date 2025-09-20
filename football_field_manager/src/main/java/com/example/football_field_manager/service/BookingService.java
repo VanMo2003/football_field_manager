@@ -129,7 +129,7 @@ public class BookingService {
     }
 
 
-    @PreAuthorize("hasRole('MANEGE')")
+    @PreAuthorize("@BookingSecurity.isFootballFieldOwner(#bookingId, authentication.name)")
     public BookingResponse confirmBooking(Long bookingId){
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXISTED));
 
@@ -144,7 +144,7 @@ public class BookingService {
         return bookingResponse;
     }
 
-    @PreAuthorize("hasRole('MANEGE')")
+    @PreAuthorize("@BookingSecurity.isFootballFieldOwner(#bookingId, authentication.name)")
     public BookingResponse completeBooking(Long bookingId){
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXISTED));
 
@@ -156,8 +156,7 @@ public class BookingService {
 
         return bookingResponse;
     }
-
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("@BookingSecurity.isOwner(#bookingId, authentication.name)")
     public BookingResponse cancelBooking(Long bookingId){
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_EXISTED));
 
@@ -171,4 +170,5 @@ public class BookingService {
 
         return bookingResponse;
     }
+
 }
