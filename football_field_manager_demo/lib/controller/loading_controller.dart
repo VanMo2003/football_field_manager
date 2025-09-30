@@ -1,0 +1,31 @@
+import 'package:football_field_manager_demo/views/custom_snackbar.dart';
+import 'package:get/get.dart';
+
+import '../utils/dimension_utils.dart';
+
+class LoadingController extends GetxController implements GetxService {
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  Future<void> loading({required Future<void> Function() handle}) async {
+    _isLoading = true;
+    update();
+
+    await Future.delayed(
+      const Duration(milliseconds: DimensionUtils.TIME_LOADING_DEFAULT),
+      () {
+        handle()
+          ..whenComplete(() => noLoading())
+          ..onError((error, stackTrace) => noLoading())
+          ..then((value) => noLoading());
+        noLoading();
+
+      },
+    );
+  }
+
+  void noLoading() {
+    _isLoading = false;
+    update();
+  }
+}
