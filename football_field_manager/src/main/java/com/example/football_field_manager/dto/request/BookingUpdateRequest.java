@@ -18,6 +18,8 @@ import java.util.Set;
 public class BookingUpdateRequest {
     String userPhoneNumber;
 
+    LocalDate bookingDate;
+
     Long timeSlotId;
 
     Integer pitchNumber;
