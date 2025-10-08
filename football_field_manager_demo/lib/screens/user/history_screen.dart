@@ -81,7 +81,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     imageBuilder: (context, imageProvider) => Container(
                       height: 120,
                       width: 120,
-
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
                         image: DecorationImage(
