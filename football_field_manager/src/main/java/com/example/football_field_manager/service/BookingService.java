@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @org.springframework.stereotype.Service
@@ -57,6 +58,19 @@ public class BookingService {
         return bookingResponses;
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'MANEGE')")
+    public List<BookingResponse> getAllBookingByBookingDate(Long footballFieldId, LocalDate bookingDate){
+        FootballField footballField = footballFieldRepository.findById(footballFieldId).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
+
+        List<BookingResponse> bookingResponses = new ArrayList<>();
+
+        bookingRepository.findBookingByFootballFieldAndBookingDate(footballField, bookingDate).stream().map(booking ->
+                bookingResponses.add(bookingMapper.toBookingResponse(booking))
+        ).toList();
+
+        return bookingResponses;
+    }
+
     @PreAuthorize("hasAnyRole('MANEGE', 'USER')")
     public BookingResponse createBooking(BookingRequest request){
         FootballField footballField = footballFieldRepository.findById(request.getFootballFieldId()).orElseThrow(() -> new AppException(ErrorCode.FOOTBALL_FIELD_NOT_EXIST));
@@ -65,7 +79,12 @@ public class BookingService {
 
         TimeSlot timeSlot = timeSlotRepository.findById(request.getTimeSlotId()).orElseThrow(() -> new AppException(ErrorCode.TIMESLOT_NOT_EXIST));
 
-        Optional<Booking> bookingFind = bookingRepository.findBookingByFootballFieldAndTimeSlotAndPitchNumber(footballField, timeSlot, request.getPitchNumber());
+        Optional<Booking> bookingFind = bookingRepository.findBookingByBookingDateAndFootballFieldAndTimeSlotAndPitchNumber(
+                request.getBookingDate(),
+                footballField,
+                timeSlot,
+                request.getPitchNumber()
+        );
 
         if (bookingFind.isPresent()) throw new AppException(ErrorCode.TIMESLOT_EXISTED);
 
@@ -103,7 +122,9 @@ public class BookingService {
                     ? timeSlotRepository.findById(request.getTimeSlotId()).orElseThrow(() -> new AppException(ErrorCode.TIMESLOT_EXISTED))
                     : booking.getTimeSlot();
 
-            Optional<Booking> bookingFind = bookingRepository.findBookingByFootballFieldAndTimeSlotAndPitchNumber(footballField, timeSlot, request.getPitchNumber());
+            Optional<Booking> bookingFind = bookingRepository.findBookingByBookingDateAndFootballFieldAndTimeSlotAndPitchNumber(
+                    request.getBookingDate(),
+                    footballField, timeSlot, request.getPitchNumber());
 
             if (bookingFind.isPresent()) throw new AppException(ErrorCode.TIME_SLOT_HAS_BEEN_BOOKED);
         }

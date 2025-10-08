@@ -1,4 +1,3 @@
-import 'football_pitch_response.dart';
 import 'role_response.dart';
 
 class UserResponse {

@@ -18,7 +18,7 @@ import java.util.Set;
 public class BookingRequest {
     String orderCode = "ORD" + System.currentTimeMillis();
 
-    LocalDate bookingDate = LocalDate.now();
+    LocalDate bookingDate;
 
     String userPhoneNumber;
 

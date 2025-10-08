@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:football_field_manager_demo/utils/assets_utils.dart';
-import 'package:football_field_manager_demo/utils/dimension_utils.dart';
 
 import '../../../utils/color_constant.dart';
 

@@ -1,6 +1,9 @@
+import 'package:flutter/foundation.dart';
+
 class AppConstant {
   static const URL_BASE = "http://10.0.2.2:8080/ffm";
   static const URL_BASE_WEB = "http://localhost:8080/ffm";
+
   static const ENDPOINT_LOGIN = "/auth/login";
   static const ENDPOINT_LOGOUT = "/auth/logout";
   static const ENDPOINT_INTROSPECT = "/auth/introspect";
@@ -10,12 +13,16 @@ class AppConstant {
   static const ENDPOINT_UPDATE_USER_BY_ID = "/user";
   static const ENDPOINT_CHECK_EXIST_USER = "/user/checkExistUser";
   static const ENDPOINT_GET_ALL_FOOTBALL_FIELD = "/football-field";
-  static const ENDPOINT_GET_ALL_TIME_SLOT_BY_FOOTBALL_FIELD = "/timeslot?football_field_id";
+  static const ENDPOINT_GET_ALL_TIME_SLOT_BY_FOOTBALL_FIELD =
+      "/timeslot?football_field_id";
   static const ENDPOINT_CREATE_BOOKING = "/booking";
   static const ENDPOINT_GET_ALL_BY_USER = "/booking/getAllByUser";
-  static const ENDPOINT_GET_ALL_BOOKING_BY_FOOTBALL_FIELD_AND_BOOKING_DATE = "/booking/getAllBookingByBookingDate";
+  static const ENDPOINT_GET_ALL_BOOKING_BY_FOOTBALL_FIELD_AND_BOOKING_DATE =
+      "/booking/getAllBookingByBookingDate";
   static const ENDPOINT_UPLOAD_FILE = "/storage/upload";
   static const ENDPOINT_GET_FILE_BY_NAME = "/storage";
+  static const ENDPOINT_GET_IMAGE =
+      "${kIsWeb ? AppConstant.URL_BASE_WEB : AppConstant.URL_BASE}/uploads/images";
 
   static const APP_NAME = "football field management";
 

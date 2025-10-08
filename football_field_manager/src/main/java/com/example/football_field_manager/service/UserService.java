@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +54,16 @@ public class UserService {
         return  userResponse;
     }
 
+    public UserResponse getMyInfo(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+
+        UserResponse userResponse = userMapper.toUserResponse(user);
+        userResponse.setRole(roleMapper.toRoleResponse(user.getRole()));
+
+        return  userResponse;
+    }
+
     public UserResponse createUser(UserCreateRequest request){
         boolean checkExist = userRepository.existsByUsername(request.getUsername());
 
@@ -82,8 +93,11 @@ public class UserService {
         userMapper.updateInfoUser(user, request);
 
         UserResponse userResponse = userMapper.toUserResponse(userRepository.save(user));
-        user.setGender(request.getGender().getGender());
-        user.setHometown(request.getHometown().getHometown());
+        userResponse.setGender(request.getGender().getGender());
+        userResponse.setHometown(request.getHometown().getHometown());
+        userResponse.setRole(roleMapper.toRoleResponse(user.getRole()));
+
+        userRepository.save(user);
 
         return userResponse;
     }

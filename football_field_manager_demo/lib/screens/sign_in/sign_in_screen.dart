@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:football_field_manager_demo/views/custom_snackbar.dart';
 import '../../controller/authentication_controller.dart';
 import '../../controller/loading_controller.dart';
 import '../../screens/widgets/button_text_widget.dart';

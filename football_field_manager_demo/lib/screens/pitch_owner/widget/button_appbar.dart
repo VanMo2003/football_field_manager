@@ -27,7 +27,7 @@ class ButtonAppbar extends StatelessWidget {
         width: Get.width / 2 - 20,
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(8)),
-          color: Colors.black38,
+          color: Colors.black54,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,

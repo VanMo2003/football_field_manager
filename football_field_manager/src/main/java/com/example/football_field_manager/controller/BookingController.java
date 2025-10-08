@@ -5,17 +5,14 @@ import com.example.football_field_manager.dto.request.BookingUpdateRequest;
 import com.example.football_field_manager.dto.response.ApiResponse;
 import com.example.football_field_manager.dto.response.BookingResponse;
 import com.example.football_field_manager.service.BookingService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.HttpURLConnection;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -40,6 +37,15 @@ public class BookingController {
         ApiResponse<List<BookingResponse>> response = new ApiResponse<>();
         response.setData(bookingService.getAllBookingByFootballField(userPhoneNumber));
         log.info("==> [1000][GET] /booking/getAllByFootballField/{userPhoneNumber}");
+        return response;
+    }
+
+    @GetMapping("/getAllBookingByBookingDate/{footballFieldId}/{bookingDate}")
+    ApiResponse<List<BookingResponse>> getAllBookingByBookingDate(@PathVariable Long footballFieldId,@PathVariable LocalDate bookingDate){
+        log.warn("call api [GET] /booking/getAllBookingByBookingDate/{bookingDate}");
+        ApiResponse<List<BookingResponse>> response = new ApiResponse<>();
+        response.setData(bookingService.getAllBookingByBookingDate(footballFieldId, bookingDate));
+        log.info("==> [1000][GET] /booking/getAllBookingByBookingDate/{bookingDate}");
         return response;
     }
 

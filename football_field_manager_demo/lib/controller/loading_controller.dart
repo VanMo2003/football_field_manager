@@ -1,4 +1,3 @@
-import 'package:football_field_manager_demo/views/custom_snackbar.dart';
 import 'package:get/get.dart';
 
 import '../utils/dimension_utils.dart';
@@ -19,7 +18,6 @@ class LoadingController extends GetxController implements GetxService {
           ..onError((error, stackTrace) => noLoading())
           ..then((value) => noLoading());
         noLoading();
-
       },
     );
   }

@@ -27,7 +27,7 @@ public class UserController {
 
     @GetMapping
     ApiResponse<List<UserResponse>> getAllUsers() {
-        log.warn("call api [GET] /user {}", new Date());
+        log.warn("call api [GET] /user", new Date());
 
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("Username : {}", authentication.getName());
@@ -41,16 +41,25 @@ public class UserController {
 
     @GetMapping("/{userId}")
     ApiResponse<UserResponse> getUserById(@PathVariable String userId) {
-        log.warn("call api [GET] /user/{userId} {}", new Date());
+        log.warn("call api [GET] /user/{userId}", new Date());
         ApiResponse<UserResponse> response = new ApiResponse<>();
         response.setData(userService.getUserById(userId));
         log.info("==> [1000][GET] /user/{userId}");
         return response;
     }
 
+    @GetMapping("/getMyInfo")
+    ApiResponse<UserResponse> getMyInfo() {
+        log.warn("call api [GET] /user/getMyInfo", new Date());
+        ApiResponse<UserResponse> response = new ApiResponse<>();
+        response.setData(userService.getMyInfo());
+        log.info("==> [1000][GET] /user/getMyInfo");
+        return response;
+    }
+
     @PostMapping
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreateRequest request) {
-        log.warn("call api [POST] /user {}", new Date());
+        log.warn("call api [POST] /user", new Date());
         ApiResponse<UserResponse> response = new ApiResponse<>();
         response.setData(userService.createUser(request));
         log.info("==> [1000][POST] /user");
@@ -58,7 +67,7 @@ public class UserController {
     }
     @PutMapping("/{userId}")
     ApiResponse<UserResponse> updateInfoUserById(@PathVariable String userId, @RequestBody @Valid UserUpdateInfoRequest request){
-        log.warn("call api [PUT] /user/{userId} {}", new Date());
+        log.warn("call api [PUT] /user/{userId}", new Date());
         ApiResponse<UserResponse> response = new ApiResponse<>();
         response.setData(userService.updateInfoUserById(userId, request));
         log.info("==> [1000][PUT] /user/{userId}");

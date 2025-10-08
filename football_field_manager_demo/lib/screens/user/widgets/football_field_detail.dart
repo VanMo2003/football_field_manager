@@ -23,11 +23,15 @@ class _DetailFootballFieldState extends State<DetailFootballField> {
   @override
   void initState() {
     super.initState();
-    Get.find<FootballFieldController>().setFootballField(widget.footballFieldResponse);
-    String bookingDate = DateConvert.stringFormatToRequest(DateConvert.dateTimeToString(Get.find<CalendarController>().selectedDate));
+    Get.find<FootballFieldController>().setFootballField(
+      widget.footballFieldResponse,
+    );
+    String bookingDate = DateConvert.stringFormatToRequest(
+      DateConvert.dateTimeToString(Get.find<CalendarController>().selectedDate),
+    );
     Get.find<BookingController>().getAllByFootballFieldAndBookingDate(
-        widget.footballFieldResponse.id ?? 0,
-        bookingDate
+      widget.footballFieldResponse.id ?? 0,
+      bookingDate,
     );
   }
 
@@ -39,12 +43,16 @@ class _DetailFootballFieldState extends State<DetailFootballField> {
     Get.find<BookingController>().clearData();
     Get.find<CalendarController>().clearData();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          AppbarPitchOwner(footballFieldName: widget.footballFieldResponse.name),
+          AppbarPitchOwner(
+            footballFieldName: widget.footballFieldResponse.name,
+            defaultImageUrl: widget.footballFieldResponse.defaultImageUrl,
+          ),
           BodyFootballField(
             footballFieldResponse: widget.footballFieldResponse,
           ),

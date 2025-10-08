@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:football_field_manager_demo/controller/loading_controller.dart';
 import 'package:football_field_manager_demo/controller/user_controller.dart';
-import 'package:football_field_manager_demo/data/models/request/user_request.dart';
 import 'package:football_field_manager_demo/data/models/request/user_update_request.dart';
 import 'package:football_field_manager_demo/data/models/response/user_response.dart';
 import 'package:football_field_manager_demo/screens/widgets/loading_widget.dart';
@@ -18,10 +17,15 @@ class InfoUserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    final TextEditingController fullNameController = TextEditingController(text: Get.find<UserController>().user?.fullName ?? "");
-    final TextEditingController phoneNumberController = TextEditingController(text: Get.find<UserController>().user?.phoneNumber ?? "");
-    final TextEditingController addressController = TextEditingController(text: Get.find<UserController>().user?.address ?? "");
+    final TextEditingController fullNameController = TextEditingController(
+      text: Get.find<UserController>().user?.fullName ?? "",
+    );
+    final TextEditingController phoneNumberController = TextEditingController(
+      text: Get.find<UserController>().user?.phoneNumber ?? "",
+    );
+    final TextEditingController addressController = TextEditingController(
+      text: Get.find<UserController>().user?.address ?? "",
+    );
 
     final form = GlobalKey<FormState>();
 
@@ -72,16 +76,18 @@ class InfoUserScreen extends StatelessWidget {
                           hometown: user?.hometown ?? "",
                         );
 
-                       Get.find<LoadingController>().loading(handle: () async {
-                         await Get.find<UserController>().updateUserById(user?.id ?? "", request).then(
-                               (value) {
-                             if(value == 200){
-                               showCustomSnackBar("Cập nhật thành công");
-                               Get.back();
-                             }
-                           },
-                         );
-                       },);
+                        Get.find<LoadingController>().loading(
+                          handle: () async {
+                            await Get.find<UserController>()
+                                .updateUserById(user?.id ?? "", request)
+                                .then((value) {
+                                  if (value == 200) {
+                                    showCustomSnackBar("Cập nhật thành công");
+                                    Get.back();
+                                  }
+                                });
+                          },
+                        );
                       },
                     ),
                   ],

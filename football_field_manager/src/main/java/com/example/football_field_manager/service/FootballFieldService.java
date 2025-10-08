@@ -11,11 +11,13 @@ import com.example.football_field_manager.mapper.FootballFieldMapper;
 import com.example.football_field_manager.mapper.UserMapper;
 import com.example.football_field_manager.repository.FootballFieldRepository;
 import com.example.football_field_manager.repository.UserRepository;
+import com.example.football_field_manager.utils.UploadFileUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,20 +29,17 @@ public class FootballFieldService {
     FootballFieldRepository footballFieldRepository;
     FootballFieldMapper footballFieldMapper;
     UserRepository userRepository;
+    UploadFileUtil uploadFileUtil;
 
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public List<FootballFieldResponse> getAllFootballField(){
         List<FootballField> footballFields = footballFieldRepository.findAll();
 
-        List<FootballFieldResponse> footballFieldResponses = footballFields.stream().map(footballField ->
-                footballFieldMapper.toFootballFieldResponse(footballField)
-        ).toList();
-
-        return footballFieldResponses;
+        return footballFields.stream().map(footballFieldMapper::toFootballFieldResponse).toList();
     }
 
     @PreAuthorize("hasRole('MANEGE')")
-    public FootballFieldResponse createFootballField(FootballFieldRequest request){
+    public FootballFieldResponse createFootballField(FootballFieldRequest request, MultipartFile image){
         Optional<FootballField> footballFieldFind = footballFieldRepository.findByName(request.getName());
 
         if (footballFieldFind.isPresent()) throw new AppException(ErrorCode.FOOTBALL_FIELD_EXISTED);
@@ -52,9 +51,13 @@ public class FootballFieldService {
         if (footballFieldRepository.findByUser(user).isPresent()) throw new AppException(ErrorCode.USER_OF_FOOTBALL_FIELD_EXISTED);
 
         footballField.setUser(user);
-        footballFieldRepository.save(footballField);
+
+        String imageUrl = uploadFileUtil.uploadFile(image);
+        footballField.setDefaultImageUrl(imageUrl);
 
         FootballFieldResponse footballFieldResponse = footballFieldMapper.toFootballFieldResponse(footballField);
+
+        footballFieldRepository.save(footballField);
 
         return footballFieldResponse;
     }
@@ -65,9 +68,9 @@ public class FootballFieldService {
 
         footballFieldMapper.updateFootballField(footballField, request);
 
-        footballFieldRepository.save(footballField);
-
         FootballFieldResponse footballFieldResponse = footballFieldMapper.toFootballFieldResponse(footballField);
+
+        footballFieldRepository.save(footballField);
 
         return footballFieldResponse;
     }

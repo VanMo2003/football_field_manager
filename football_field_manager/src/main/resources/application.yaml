@@ -13,11 +13,16 @@ spring:
     hibernate:
       ddl-auto: update
 #    show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 100MB
 
 jwt:
   signer-key: kjndbGn4Mr++6lXA6yeDSYpVM29E2LJD8fvLkPRvQClKlpJFMuEJCTtgYDdF68lS
   access-token-expiration: 86400
 
-
+uploads:
+  images: D:/project_tttn/football_field_manager/src/main/resources/static/uploads/images
 
 

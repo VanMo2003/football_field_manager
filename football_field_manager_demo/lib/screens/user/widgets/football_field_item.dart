@@ -1,9 +1,10 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:football_field_manager_demo/helper/route_helper.dart';
 import 'package:football_field_manager_demo/screens/user/widgets/football_field_detail.dart';
 import 'package:football_field_manager_demo/screens/user/widgets/icon_text.dart';
+import 'package:football_field_manager_demo/utils/app_constant.dart';
 import '../../../data/models/response/football_pitch_response.dart';
 import 'package:get/get.dart';
 
@@ -53,18 +54,23 @@ class FootballFieldItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: Get.height * 0.4 * 0.4,
-            decoration: BoxDecoration(
-              color: Colors.white54,
-              borderRadius: BorderRadius.circular(
-                DimensionUtils.BORDER_RADIUS_DEFAULT,
-              ),
-              image: DecorationImage(
-                image:  AssetImage(AssetsUtils.getImagePitch(1)),
-                fit: BoxFit.cover,
+          CachedNetworkImage(
+            imageUrl:
+                "${AppConstant.ENDPOINT_GET_IMAGE}/${footballFieldResponse.defaultImageUrl}",
+            imageBuilder: (context, imageProvider) => Container(
+              height: Get.height * 0.4 * 0.4,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                image: DecorationImage(
+                  image: NetworkImage(
+                    "${AppConstant.ENDPOINT_GET_IMAGE}/${footballFieldResponse.defaultImageUrl}",
+                  ),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
+            errorWidget: (context, url, error) =>
+                const Icon(Icons.error, color: Colors.deepOrangeAccent),
           ),
           Expanded(
             child: Padding(
@@ -108,9 +114,15 @@ class FootballFieldItem extends StatelessWidget {
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
-                            log("click to pitch : ${footballFieldResponse.name}");
+                            log(
+                              "click to pitch : ${footballFieldResponse.name}",
+                            );
 
-                            Get.to(DetailFootballField(footballFieldResponse: footballFieldResponse));
+                            Get.to(
+                              DetailFootballField(
+                                footballFieldResponse: footballFieldResponse,
+                              ),
+                            );
                           },
                           child: Container(
                             height: Get.height * 0.04,

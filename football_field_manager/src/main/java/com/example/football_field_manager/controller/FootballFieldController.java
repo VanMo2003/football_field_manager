@@ -10,9 +10,11 @@ import com.example.football_field_manager.service.FootballFieldService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -34,10 +36,13 @@ public class FootballFieldController {
     }
 
     @PostMapping
-    ApiResponse<FootballFieldResponse> createFootballField(@RequestBody @Valid FootballFieldRequest request){
+    ApiResponse<FootballFieldResponse> createFootballField(
+            @ModelAttribute FootballFieldRequest request,
+            @RequestParam("image") MultipartFile image
+    ){
         log.warn("call api [POST] /football-field");
         ApiResponse<FootballFieldResponse> response = new ApiResponse<>();
-        response.setData(footballFieldService.createFootballField(request));
+        response.setData(footballFieldService.createFootballField(request, image));
         log.info("==> [1000][POST] /football-field");
         return response;
     }

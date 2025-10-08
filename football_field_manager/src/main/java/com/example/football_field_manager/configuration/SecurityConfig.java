@@ -25,6 +25,10 @@ public class SecurityConfig {
     @Value("${jwt.signer-key}")
     protected String SIGNER_KEY;
 
+    private static final String[] PUBLIC_ENDPOINT_GET = {
+            "/uploads/images/**",
+    };
+
     private static final String[] PUBLIC_ENDPOINT_POST = {
             "/user",
             "/auth/login",
@@ -36,6 +40,7 @@ public class SecurityConfig {
 
         httpSecurity.authorizeHttpRequests(request ->
                 request
+                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINT_GET).permitAll()
                         .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT_POST).permitAll()
                         .anyRequest().authenticated()
         );

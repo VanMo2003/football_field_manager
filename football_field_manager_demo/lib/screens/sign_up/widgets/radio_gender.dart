@@ -12,8 +12,6 @@ extension GenderX on Gender {
         return "Nam";
       case Gender.female:
         return "Nữ";
-      default:
-        return "Giới tính";
     }
   }
 }
