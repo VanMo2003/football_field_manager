@@ -28,6 +28,7 @@ public class FootballField {
     @Length(max = 1000)
     String description;
     String location;
+    String defaultImageUrl;
 
     @NotNull(message = "giá mặc định của sân không được bỏ trống")
     @Column(nullable = false, precision = 15)
