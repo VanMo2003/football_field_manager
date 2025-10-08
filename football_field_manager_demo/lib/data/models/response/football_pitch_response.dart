@@ -1,11 +1,11 @@
 import 'time_slot_response.dart';
-import 'user_response.dart';
 
 class FootballFieldResponse {
   int? id;
   String? name;
   String? description;
   int? totalPitches;
+  String? defaultImageUrl;
   String? location;
   int? price;
   List<TimeSlotResponse>? timeSlots;
@@ -14,6 +14,8 @@ class FootballFieldResponse {
   FootballFieldResponse({
     this.id,
     this.name,
+    this.defaultImageUrl,
+    this.description,
     this.totalPitches,
     this.location,
     this.price,
@@ -24,6 +26,8 @@ class FootballFieldResponse {
   FootballFieldResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    defaultImageUrl = json['defaultImageUrl'];
+    description = json['description'];
     totalPitches = json['totalPitches'];
     location = json['location'];
     price = json['price'];
@@ -39,6 +43,8 @@ class FootballFieldResponse {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
+    data['description'] = description;
+    data['defaultImageUrl'] = defaultImageUrl;
     data['id'] = id;
     data['totalPitches'] = totalPitches;
     data['location'] = location;

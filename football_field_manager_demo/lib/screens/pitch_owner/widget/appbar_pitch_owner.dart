@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../controller/calendar_controller.dart';
-import '../../../controller/user_controller.dart';
 import '../../../utils/color_constant.dart';
 import 'package:get/get.dart';
-import '../../../controller/side_bar_controller.dart';
 import '../../../utils/date_convert.dart';
 import '../../../utils/dimension_utils.dart';
 import '../../../utils/language/key_language.dart';
@@ -23,7 +21,9 @@ class AppbarPitchOwner extends StatelessWidget {
       height: Get.height * 0.23,
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(DimensionUtils.BORDER_RADIUS_OVER_LARGE)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(DimensionUtils.BORDER_RADIUS_OVER_LARGE),
+        ),
       ),
       child: SafeArea(
         child: Column(
@@ -35,7 +35,10 @@ class AppbarPitchOwner extends StatelessWidget {
                   onPressed: () {
                     Get.back();
                   },
-                  icon: Icon(Icons.arrow_back, size: DimensionUtils.ICON_SIZE_DEFAULT),
+                  icon: Icon(
+                    Icons.arrow_back,
+                    size: DimensionUtils.ICON_SIZE_DEFAULT,
+                  ),
                 ),
                 StyleUtils.defaultTextStyle(
                   text: footballFieldName ?? KeyLanguage.nameFootballFile.tr,
@@ -46,7 +49,10 @@ class AppbarPitchOwner extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.settings, size: DimensionUtils.ICON_SIZE_DEFAULT),
+                  icon: Icon(
+                    Icons.settings,
+                    size: DimensionUtils.ICON_SIZE_DEFAULT,
+                  ),
                 ),
               ],
             ),
@@ -58,7 +64,9 @@ class AppbarPitchOwner extends StatelessWidget {
                   builder: (controller) {
                     return ButtonAppbar(
                       icons: Icons.calendar_month,
-                      label: DateConvert.dateTimeToString(controller.selectedDate),
+                      label: DateConvert.dateTimeToString(
+                        controller.selectedDate,
+                      ),
                       onTap: () {
                         Get.to(CalendarScreen());
                       },

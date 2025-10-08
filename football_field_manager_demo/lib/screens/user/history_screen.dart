@@ -1,12 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:football_field_manager_demo/controller/booking_controller.dart';
 import 'package:football_field_manager_demo/data/models/response/booking_response.dart';
-import 'package:football_field_manager_demo/utils/assets_utils.dart';
 import 'package:football_field_manager_demo/utils/date_convert.dart';
 import 'package:football_field_manager_demo/utils/dimension_utils.dart';
 import 'package:football_field_manager_demo/utils/style.dart';
 import 'package:get/get.dart';
 
+import '../../utils/app_constant.dart';
 import '../../utils/color_constant.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -36,7 +37,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
           return Center(
             child: Text(
               "Danh sách trống",
-              style: StyleUtils.styleDefault.copyWith(fontSize: DimensionUtils.FONT_SIZE_EXTRA_LARGE),
+              style: StyleUtils.styleDefault.copyWith(
+                fontSize: DimensionUtils.FONT_SIZE_EXTRA_LARGE,
+              ),
             ),
           );
         }
@@ -56,10 +59,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
               height: 150,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(DimensionUtils.BORDER_RADIUS_DEFAULT)),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(DimensionUtils.BORDER_RADIUS_DEFAULT),
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: ColorConstant.getBlackColor().withValues(alpha: 0.25),
+                    color: ColorConstant.getBlackColor().withValues(
+                      alpha: 0.25,
+                    ),
                     offset: const Offset(0, 2),
                     spreadRadius: 2,
                     blurRadius: 7,
@@ -68,15 +75,27 @@ class _HistoryScreenState extends State<HistoryScreen> {
               ),
               child: Row(
                 children: [
-                  Container(
-                    height: 120,
-                    width: 120,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(image: AssetImage(AssetsUtils.getImagePitch(1)), fit: BoxFit.cover),
-                      borderRadius: BorderRadius.all(Radius.circular(DimensionUtils.BORDER_RADIUS_EXTRA_SMALL)),
+                  CachedNetworkImage(
+                    imageUrl:
+                        "${AppConstant.ENDPOINT_GET_IMAGE}/${bookingResponse.footballField?.defaultImageUrl}",
+                    imageBuilder: (context, imageProvider) => Container(
+                      height: 120,
+                      width: 120,
+
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            "${AppConstant.ENDPOINT_GET_IMAGE}/${bookingResponse.footballField?.defaultImageUrl}",
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error, color: Colors.deepOrangeAccent),
                   ),
-                  SizedBox(width: DimensionUtils.SIZE_BOX_HEIGHT_SMALL),
+                  const SizedBox(width: DimensionUtils.SIZE_BOX_HEIGHT_SMALL),
                   Stack(
                     children: [
                       Column(
@@ -85,7 +104,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           Text(
                             bookingResponse.footballField?.name ?? "",
                             maxLines: 2,
-                            style: StyleUtils.titleLarge.copyWith(fontSize: DimensionUtils.FONT_SIZE_OVER_LARGE),
+                            style: StyleUtils.titleLarge.copyWith(
+                              fontSize: DimensionUtils.FONT_SIZE_OVER_LARGE,
+                            ),
                           ),
                           Text(
                             "Ngày đặt sân : ${bookingResponse.bookingDate == null ? DateConvert.dateTimeToString(DateTime.now()) : DateConvert.dateTimeToString(DateConvert.stringResponseToDateTime(bookingResponse.bookingDate!))}",
@@ -93,11 +114,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           ),
                           Text(
                             "Số sân : ${bookingResponse.pitchNumber}",
-                            style: StyleUtils.styleDefault.copyWith(fontStyle: FontStyle.italic),
+                            style: StyleUtils.styleDefault.copyWith(
+                              fontStyle: FontStyle.italic,
+                            ),
                           ),
                           Text(
                             "Khung giờ : ${bookingResponse.timeSlot?.startTime ?? ""} - ${bookingResponse.timeSlot?.endTime ?? ""} ",
-                            style: StyleUtils.styleDefault.copyWith(fontStyle: FontStyle.italic),
+                            style: StyleUtils.styleDefault.copyWith(
+                              fontStyle: FontStyle.italic,
+                            ),
                           ),
                         ],
                       ),
@@ -107,7 +132,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
               ),
             );
           },
-          separatorBuilder: (context, index) => SizedBox(height: DimensionUtils.SIZE_BOX_HEIGHT_SMALL),
+          separatorBuilder: (context, index) =>
+              SizedBox(height: DimensionUtils.SIZE_BOX_HEIGHT_SMALL),
         );
       },
     );
